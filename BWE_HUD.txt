@@ -1,16 +1,15 @@
 ## APIVersion: 100024
-## Title: NewAddon
-## Version: 1.2
-## Author: Developer
-## Description: NewAddon description.
-## SavedVariables: NewAddonSavedVariables
+## Title: BWE HUD
+## Version: 0.1
+## Author: Nurami
+## Description: Target and Player Frame Replacement.
+## SavedVariables: BWE_HUD_SV
 ## OptionalDependsOn: LibAddonMenu-2.0
 
 Languages\en.lua
 Languages\$(language).lua
 
-Bindings.xml
-NewAddon.xml
+BWE_HUD.xml
 
 LibStub\LibStub.lua
 
@@ -31,5 +30,8 @@ LibAddonMenu-2.0\controls\texture.lua
 LibAddonMenu-2.0\controls\iconpicker.lua
 LibAddonMenu-2.0\controls\divider.lua
 
-NewAddon.lua
+BWE_Defaults.lua
+BWE_HUD.lua
+BWE_Target.lua
+BWE_Player.lua
 Settings.lua

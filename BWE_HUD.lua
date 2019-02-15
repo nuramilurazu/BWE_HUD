@@ -1,77 +1,37 @@
-NewAddon = {
-    name            = "NewAddon",           -- Matches folder and Manifest file names.
-    -- version         = "1.0",                -- A nuisance to match to the Manifest.
-    author          = "Developer",
-    color           = "DDFFEE",             -- Used in menu titles and so on.
-    menuName        = "NewAddon Options",   -- Unique identifier for menu object.
-    -- Default settings.
-    savedVariables = {},
+BWE_HUD = {
+    ADDON_NAME      = "BWE_HUD",  
+    ADDON_AUTHOR    = "Nurami",
+    ADDON_VERSION   = "0.1",
+    ADDON_SETTINGS  = 2,
+    color           = "DDFFEE",             
+    menuName        = "BWE_HUD Options",
 }
 
--- Wraps text with a color.
-function NewAddon.Colorize(text, color)
+function BWE_HUD.Colorize(text, color)
     -- Default to addon's .color.
-    if not color then color = NewAddon.color end
+    if not color then color = BWE_HUD.color end
 
     text = "|c" .. color .. text .. "|r"
 
     return text
 end
 
-function NewAddon.AnimateText()
-    -- Avoid playing the animation over itself.
-    if not NewAddonActive:IsHidden() then return end
-
-    local animation, timeline = CreateSimpleAnimation(ANIMATION_ALPHA, NewAddonActive)
-
-    NewAddonActive:SetHidden(false)
-    animation:SetAlphaValues(NewAddonActive:GetAlpha(), 1)
-    animation:SetDuration(3000)
-
-    -- Fade-out after fade-in.
-    timeline:SetHandler('OnStop', function()
-        local animation, timeline = CreateSimpleAnimation(ANIMATION_ALPHA, NewAddonActive)
-
-        animation:SetAlphaValues(NewAddonActive:GetAlpha(), 0)
-        animation:SetDuration(3000)
+function BWE_HUD.OnAddOnLoaded(event, addonName)
+    if addonName ~= BWE_HUD.ADDON_NAME then return end
     
-        timeline:SetHandler('OnStop', function()
-            NewAddonActive:SetHidden(true)
-        end)
-
-        timeline:PlayFromStart()
-    end)
-
-    timeline:PlayFromStart()
+    BWE_HUD:Initialize()
 end
 
-function NewAddon.Activated(e)
-    EVENT_MANAGER:UnregisterForEvent(NewAddon.name, EVENT_PLAYER_ACTIVATED)
+function BWE_HUD:Initialize()
 
-    d(NewAddon.name .. GetString(SI_NEW_ADDON_MESSAGE)) -- Prints to chat.
-
-    ZO_AlertNoSuppression(UI_ALERT_CATEGORY_ALERT, nil, 
-        NewAddon.name .. GetString(SI_NEW_ADDON_MESSAGE)) -- Top-right alert.
-
-    -- Animate the xml UI center text, after a delay.
-    zo_callLater(NewAddon.AnimateText, 3000)
-end
--- When player is ready, after everything has been loaded.
-EVENT_MANAGER:RegisterForEvent(NewAddon.name, EVENT_PLAYER_ACTIVATED, NewAddon.Activated)
-
-function NewAddon.OnAddOnLoaded(event, addonName)
-    if addonName ~= NewAddon.name then return end
-    EVENT_MANAGER:UnregisterForEvent(NewAddon.name, EVENT_ADD_ON_LOADED)
-
-    NewAddon.savedVariables = ZO_SavedVars:New("NewAddonSavedVariables", 1, nil, NewAddon.savedVariables)
+    BWE_HUD.savedVariables = ZO_SavedVars:NewAccountWide("BWE_HUD_SV", ADDON_SETTINGS, nil, BWE_HUD.savedVariables)
     
-    -- Settings menu in Settings.lua.
-    NewAddon.LoadSettings()
+    BWE_HUD.CreateSettings()
+    --BWE_HUD.CreateTargetControls
+    --BWE_HUD.CreatePlayerControls
 
-    -- Slash commands must be lowercase. Set to nil to disable.
-    SLASH_COMMANDS["/newaddon"] = NewAddon.AnimateText
-    -- Reset autocomplete cache to update it.
-    SLASH_COMMAND_AUTO_COMPLETE:InvalidateSlashCommandCache()
+    EVENT_MANAGER:UnregisterForEvent(BWE_HUD.ADDON_NAME, EVENT_ADD_ON_LOADED)
+    
 end
--- When any addon is loaded, but before UI (Chat) is loaded.
-EVENT_MANAGER:RegisterForEvent(NewAddon.name, EVENT_ADD_ON_LOADED, NewAddon.OnAddOnLoaded)
+
+EVENT_MANAGER:RegisterForEvent(BWE_HUD.ADDON_NAME, EVENT_ADD_ON_LOADED, BWE_HUD.OnAddOnLoaded)

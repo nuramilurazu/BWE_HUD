@@ -1,27 +1,28 @@
 -- Settings menu.
-function NewAddon.LoadSettings()
-    local LAM = LibStub("LibAddonMenu-2.0")
+BWE_HUD = BWE_HUD or {}
 
-    local panelData = {
-        type = "panel",
-        name = NewAddon.menuName,
-        displayName = NewAddon.Colorize(NewAddon.menuName),
-        author = NewAddon.Colorize(NewAddon.author, "AAF0BB"),
-        -- version = NewAddon.Colorize(NewAddon.version, "AA00FF"),
-        slashCommand = "/newaddon",
-        registerForRefresh = true,
-        registerForDefaults = true,
-    }
-    LAM:RegisterAddonPanel(NewAddon.menuName, panelData)
+local LAM2 = LibStub("LibAddonMenu-2.0")
 
-    local optionsTable = {}
+function BWE_HUD.LoadSettings()
+
+        local panelData = {
+                type = "panel",
+                name = BWE_HUD.menuName,
+                displayName = BWE_HUD.Colorize(BWE_HUD.menuName),
+                author = BWE_HUD.Colorize(BWE_HUD.author, "AAF0BB"),
+                registerForRefresh = true,
+                registerForDefaults = true,
+        }
+        local ctrlOptionsPanel = LAM2:RegisterAddonPanel(BWE_HUD.menuName, panelData)
+
+        local optionsTable = {}
     
     -- Category. --
-	table.insert(optionsTable, {
+        table.insert(optionsTable, {
             type = "header",
             name = ZO_HIGHLIGHT_TEXT:Colorize("My Header"),
             width = "full",	--or "half" (optional)
-    })
+        })
 	
 	table.insert(optionsTable, {
             type = "description",
@@ -29,9 +30,9 @@ function NewAddon.LoadSettings()
             title = nil,	--(optional)
             text = "My description text to display.",
             width = "full",	--or "half" (optional)
-    })
+        })
     
-    table.insert(optionsTable, {
+        table.insert(optionsTable, {
             type = "dropdown",
             name = "My Dropdown",
             tooltip = "Dropdown's tooltip text.",
@@ -40,9 +41,9 @@ function NewAddon.LoadSettings()
             setFunc = function(var) print(var) end,
             width = "half",	--or "half" (optional)
             warning = "Will need to reload the UI.",	--(optional)
-    })
+        })
     
-    table.insert(optionsTable, {
+        table.insert(optionsTable, {
             type = "dropdown",
             name = "My Dropdown",
             tooltip = "Dropdown's tooltip text.",
@@ -51,9 +52,9 @@ function NewAddon.LoadSettings()
             setFunc = function(var) print(var) end,
             width = "half",	--or "half" (optional)
             warning = "Will need to reload the UI.",	--(optional)
-    })
+        })
     
-    table.insert(optionsTable, {
+        table.insert(optionsTable, {
             type = "slider",
             name = "My Slider",
             tooltip = "Slider's tooltip text.",
@@ -64,69 +65,51 @@ function NewAddon.LoadSettings()
             setFunc = function(value) d(value) end,
             width = "half",	--or "half" (optional)
             default = 5,	--(optional)
-    })
+        })
     
-    table.insert(optionsTable, {
+        table.insert(optionsTable, {
             type = "button",
             name = "My Button",
             tooltip = "Button's tooltip text.",
             func = function() d("button pressed!") end,
             width = "half",	--or "half" (optional)
             warning = "Will need to reload the UI.",	--(optional)
-    })
+        })
     
-    table.insert(optionsTable, {
+        table.insert(optionsTable, {
             type = "submenu",
-            name = "Submenu Title",
-            tooltip = "My submenu tooltip",	--(optional)
+            name = "Target Frame",
             controls = {
                 [1] = {
                     type = "checkbox",
-                    name = "My Checkbox",
-                    tooltip = "Checkbox's tooltip text.",
-                    getFunc = function() return true end,
-                    setFunc = function(value) d(value) end,
-                    width = "half",	--or "half" (optional)
-                    warning = "Will need to reload the UI.",	--(optional)
+                    name = "Perfer User ID over Character Name",
+                    tooltip = "Use @Example instead",
+                    default = BWE_HUD.savedVariables.target.useACCID,
+                    getFunc = function() return default end,
+                    setFunc = function(newValue) BWE_HUD.savedVariables.table.useACCID = newValue end,
                 },
                 [2] = {
                     type = "colorpicker",
-                    name = "My Color Picker",
+                    name = "Target Frame Color",
                     tooltip = "Color Picker's tooltip text.",
-                    getFunc = function() return 1, 0, 0, 1 end,	--(alpha is optional)
-                    setFunc = function(r,g,b,a) print(r, g, b, a) end,	--(alpha is optional)
-                    width = "half",	--or "half" (optional)
-                    warning = "warning text",
+                    getFunc = function() return 1, 0, 0 end,
+                    setFunc = function(r,g,b,a) print(r, g, b) end,
                 },
                 [3] = {
-                    type = "editbox",
-                    name = "My Editbox",
-                    tooltip = "Editbox's tooltip text.",
-                    getFunc = function() return "this is some text" end,
-                    setFunc = function(text) print(text) end,
-                    isMultiline = false,	--boolean
-                    width = "half",	--or "half" (optional)
-                    warning = "Will need to reload the UI.",	--(optional)
-                    default = "",	--(optional)
+                    type = "slider",
+                    name = "Target Frame Alpha",
+                    min = 10,
+                    max = 100,
+                    step = 5,
+                    default = BWE_HUD.savedVariables.alpha,
+                    getFunc = function() return zo_round(BWE_HUD.savedVariables.target.opacity.barAlpha*100) end,
+                    setFunc = function(newValue) 
+                        BWE_HUD.savedVariables.target.opacity.barAlpha = zo_roundToNearest((newValue/100), .01),
+                        BWE_HUD.UpdateTargetFrame()
+                    end,
                 },
             },
-    })
+        })
     
-    table.insert(optionsTable, {
-            type = "custom",
-            reference = "MyAddonCustomControl",	--unique name for your control to use as reference
-            refreshFunc = function(customControl) end,	--(optional) function to call when panel/controls refresh
-            width = "half",	--or "half" (optional)
-    })
-    
-    table.insert(optionsTable, {
-            type = "texture",
-            image = "EsoUI\\Art\\ActionBar\\abilityframe64_up.dds",
-            imageWidth = 64,	--max of 250 for half width, 510 for full
-            imageHeight = 64,	--max of 100
-            tooltip = "Image's tooltip text.",	--(optional)
-            width = "half",	--or "half" (optional)
-    })
-    
-    LAM:RegisterOptionControls(NewAddon.menuName, optionsTable)
+    LAM2:RegisterOptionControls(BWE_HUD.menuName, optionsTable)
 end
