@@ -48,7 +48,7 @@ function BWE_HUD.CreateTargetControls()
     local frame = {}
 
     frame = wim:CreateControl("BWE_TARGET", BWE_HUD.targetContainer, CT_CONTROL)
-	frame:SetDimensions(tlw:GetDimensions())
+	frame:SetDimensions(400, 50)
 	frame:SetAnchor(TOPLEFT, BWE_HUD.targetContainer, TOPLEFT)
     frame:SetMouseEnabled(true)
 
@@ -66,8 +66,8 @@ function BWE_HUD.CreateTargetControls()
     frame.barBg:SetInheritAlpha(false)
 
     frame.bar = wim:CreateControl(nil, frame.statusBar, CT_STATUSBAR)
-    frame.bar:SetDimensions(frame:GetDimensions())
-    --frame.bar:SetDimensions(frame.statusBar:GetWidth()-(4*sf), frame.statusBar:GetHeight()-(4*sf))
+    --frame.bar:SetDimensions(frame:GetDimensions())
+    frame.bar:SetDimensions(frame.statusBar:GetWidth()-(4*sf), frame.statusBar:GetHeight()-(4*sf))
 	frame.bar:SetAnchor(TOP, frame.statusBar, TOP, 0, (2*sf))
     frame.bar:SetDrawLayer(0)
 	frame.bar:SetDrawLevel(1)
