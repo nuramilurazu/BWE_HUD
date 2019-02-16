@@ -39,20 +39,27 @@ function BWE_HUD.CreateSettings()
             controls = {
                 [1] = {
                     type = "checkbox",
+                    name = "Unlock Frame",
+                    default = BWE_HUD.targetUnlock,
+                    getFunc = function() return BWE_HUD.targetUnlock end,
+                    setFunc = function(newValue) BWE_HUD.targetUnlocker(newValue) end,					
+                },
+                [2] = {
+                    type = "checkbox",
                     name = "Perfer User ID over Character Name",
                     tooltip = "Use @Example instead",
                     default = BWE_HUD.defaults.target.useACCID,
                     getFunc = function() return BWE_HUD.SV.target.useACCID end,
                     setFunc = function(newValue) BWE_HUD.SV.target.useACCID = newValue end,
                 },
-                [2] = {
+                [3] = {
                     type = "colorpicker",
                     name = "Target Frame Color",
                     default = function() return unpack(BWE_HUD.SV.target.custom.color) end,
                     getFunc = function() return unpack(BWE_HUD.SV.target.custom.color) end,
                     setFunc = function(r, g, b, a) BWE_HUD.SV.target.custom.color = {r, g, b, a} end,
                 },
-                [3] = {
+                [4] = {
                     type = "slider",
                     name = "Target Frame Opacity",
                     min = 10,
@@ -65,7 +72,7 @@ function BWE_HUD.CreateSettings()
                         BWE_HUD.UpdateTargetFrameAlpha()
                     end,
                 },
-                [4] = {
+                [5] = {
                     type = "slider",
                     name = "Background Opacity",
                     min = 0,
@@ -78,7 +85,7 @@ function BWE_HUD.CreateSettings()
                         BWE_HUD.UpdateTargetFrameAlpha()
                     end,
                 },
-                [5] = {
+                [6] = {
                     type = "slider",
                     name = "Gloss Opacity",
                     min = 0,

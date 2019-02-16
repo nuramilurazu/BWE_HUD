@@ -13,28 +13,13 @@ local allianceIcons = {
 	[3]			= [[/esoui/art/guild/guildbanner_icon_daggerfall.dds]],
 }
 
-SLASH_COMMANDS["/unlocktarget"] = function()
-    local frame = BWE_HUD.targetFrame["BWE_TARGET"]
-
-    if BWE_HUD.targetUnlock == false then
-        BWE_HUD.targetContainer:SetMovable(true)
-        BWE_HUD.targetContainer:SetMouseEnabled(true)
-        frame:SetHidden(false)
-        frame:SetMovable(true)
-        frame:SetMouseEnabled(true)
-    else
-        BWE_HUD.targetContainer:SetMovable(false)
-        BWE_HUD.targetContainer:SetMouseEnabled(false)
-        frame:SetHidden(true)
-        frame:SetMovable(false)
-        frame:SetMouseEnabled(false)
-    end
-end
-
 function BWE_HUD.targetUnlocker(value)
     local frame = BWE_HUD.targetFrame["BWE_TARGET"]
     
-    frame:SetHidden(not Value)
+	BWE_HUD.targetContainer:SetMovable(value)
+	BWE_HUD.targetContainer:SetMouseEnabled(value)
+    
+    frame:SetHidden(not value)
     frame:SetMovable(value)
     frame:SetMouseEnabled(value)
 
