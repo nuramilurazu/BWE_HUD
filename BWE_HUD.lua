@@ -23,10 +23,10 @@ function BWE_HUD:Initialize()
     BWE_HUD.CreateSettings()
 
     if BWE_HUD.SV.target.enabled == true then 
+        ZO_TargetUnitFramereticleover:SetHidden(true)
+        
         BWE_HUD.CreateTargetControls() 
         BWE_HUD.InitializeFrame()
-
-        ZO_TargetUnitFramereticleover:SetHidden(true)
 
         BWE_HUD.targetContainer:ClearAnchors()
         BWE_HUD.targetContainer:SetAnchor(TOPLEFT, GuiRoot, TOPLEFT, BWE_HUD.SV.target.position.offsetX, BWE_HUD.SV.target.position.offsetY)
