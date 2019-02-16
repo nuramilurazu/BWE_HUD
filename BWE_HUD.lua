@@ -1,12 +1,11 @@
 BWE_HUD = BWE_HUD or {}
 
 local evm = GetEventManager()
-local wim = GetWindowManager()
     
 BWE_HUD.ADDON_NAME      = "BWE_HUD"
 BWE_HUD.ADDON_AUTHOR    = "Nurami"
-BWE_HUD.ADDON_VERSION   = 0.1
-BWE_HUD.ADDON_SETTINGS  = 1      
+BWE_HUD.ADDON_VERSION   = 0.2
+BWE_HUD.ADDON_SETTINGS  = 1.2
 BWE_HUD.menuName        = "BWE_HUD Options"
 BWE_HUD.Debug			= false
 

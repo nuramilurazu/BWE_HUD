@@ -11,6 +11,7 @@ local allianceIcons = {
 	[1]			= [[/esoui/art/guild/guildbanner_icon_aldmeri.dds]],
 	[2]			= [[/esoui/art/guild/guildbanner_icon_ebonheart.dds]],
 	[3]			= [[/esoui/art/guild/guildbanner_icon_daggerfall.dds]],
+	[100]		= [[/esoui/art/ava/ava_allianceflag_neutral.dds]]
 }
 
 function BWE_HUD.targetUnlocker(value)
@@ -40,9 +41,7 @@ function BWE_HUD.CreateTargetControls()
     tlw:SetMovable(false)
     tlw:SetMouseEnabled(false)
     tlw:SetClampedToScreen(true)
-    tlw:SetHidden(false)
-
-	if BWE_HUD.Debug == true then tlw:SetHidden(false) end  
+    tlw:SetHidden(false) 
 
     BWE_HUD.targetContainer = tlw
 
@@ -103,7 +102,7 @@ function BWE_HUD.CreateTargetControls()
 	frame.info:SetDrawLayer(1)
 	frame.info:SetDrawLevel(2)
 	frame.info:SetVerticalAlignment(TEXT_ALIGN_CENTER)
-	frame.info:SetFont("$(BOLD_FONT)|14|soft-shadow-thin")
+	frame.info:SetFont("$(BOLD_FONT)|13|soft-shadow-thin")
 	frame.info:SetText("Queen Ayren(50) ")
     
     frame.title = wim:CreateControl(nil, frame, CT_LABEL)
@@ -114,22 +113,14 @@ function BWE_HUD.CreateTargetControls()
     frame.title:SetVerticalAlignment(TEXT_ALIGN_CENTER)
     frame.title:SetFont("$(BOLD_FONT)|13|soft-shadow-thin")
     frame.title:SetText("  Veteran")
-
-    frame.dead = wim:CreateControl(nil, frame, CT_TEXTURE)
-	frame.dead:SetDimensions(48, 48)
-	frame.dead:SetAnchor(BOTTOM, frame, BOTTOM, 0, (2*sf))
-	frame.dead:SetDrawLayer(2)
-	frame.dead:SetDrawLevel(0)
-	frame.dead:SetHidden(true)
-    frame.dead:SetTexture("/esoUI/Art/Icons/Mapkey/mapkey_groupboss.dds")
     
     frame.alliance = wim:CreateControl(nil, frame, CT_TEXTURE)
 	frame.alliance:SetDimensions(0, 18)
 	frame.alliance:SetAnchor(TOPRIGHT, frame.statusBar, TOPLEFT, -sf, 0)
 	frame.alliance:SetDrawLayer(2)
 	frame.alliance:SetDrawLevel(1)
-	frame.alliance:SetHidden(true)
-	frame.alliance:SetTexture("/esoui/art/guild/guildbanner_icon_aldmeri.dds")
+	frame.alliance:SetHidden(false)
+	frame.alliance:SetTexture("/esoui/art/ava/ava_allianceflag_neutral.dds")
 
     BWE_HUD.targetFrame["BWE_TARGET"] = frame
 
@@ -138,13 +129,15 @@ end
 function BWE_HUD.InitializeFrame()
     local frame = BWE_HUD.targetFrame["BWE_TARGET"]
 
-    frame:SetHidden(true)
-
     if BWE_HUD.SV.target.custom.enabled == true then
-        frame.bar:SetColor(unpack(BWE_HUD.SV.target.custom.color))
+        frame.bar:SetColor(unpack(BWE_HUD.SV.target.custom.Color))
     else
-        frame.bar:SetColor(128,0,0)
+        frame.bar:SetColor(unpack(BWE_HUD.SV.target.color))
     end
+
+    frame.value:SetFont("$(BOLD_FONT)|"..BWE_HUD.SV.target.textSize.."|soft-shadow-thin")
+    frame.info:SetFont("$(BOLD_FONT)|"..BWE_HUD.SV.target.textSize.."|soft-shadow-thin")
+    frame.title:SetFont("$(BOLD_FONT)|"..BWE_HUD.SV.target.textSize.."|soft-shadow-thin")
 
     frame:SetDimensions(BWE_HUD.SV.target.size.width, BWE_HUD.SV.target.size.height)
 
@@ -152,7 +145,13 @@ function BWE_HUD.InitializeFrame()
     frame.bar:SetAlpha(BWE_HUD.SV.target.opacity.barAlpha)
     frame.gloss:SetAlpha(BWE_HUD.SV.target.opacity.glossAlpha)
     
-    zo_callLater(BWE_HUD.RegisterTargetEvents, 2000)
+    if BWE_HUD.Debug == true then 
+        frame:SetHidden(false)
+    else
+        frame:SetHidden(true)
+        BWE_HUD.RegisterTargetEvents()
+        --zo_callLater(BWE_HUD.RegisterTargetEvents, 2000)
+    end 
 end
 
 function BWE_HUD.SaveTargetFrameLocation()
@@ -193,22 +192,22 @@ function BWE_HUD.UpdateTargetFrame()
         end
 
         if IsUnitChampion('reticleover') then
-            target.lvl = zo_iconTextFormat("esoui/art/champion/champion_icon_32.dds", 15, 15, GetUnitChampionPoints('reticleover'))
+            target.lvl = zo_iconTextFormat("esoui/art/champion/champion_icon_32.dds", iconSize.champ, iconSize.champ, GetUnitChampionPoints('reticleover'))
         else
             target.lvl = GetUnitLevel('reticleover')
         end
 
         target.class = GetClassIcon(GetUnitClassId('reticleover'))
-        target.classIcon = zo_iconFormat(target.class, 28, 28)
-		target.alliance = zo_iconFormat(allianceIcons[GetUnitAlliance('reticleover')], 28, 28)
+        target.classIcon = zo_iconFormat(target.class, iconSize.class, iconSize.class)
+		target.alliance = zo_iconFormat(allianceIcons[GetUnitAlliance('reticleover')], iconSize.ally, iconSize.ally)
 
         frame.info:SetText(target.name..target.lvl.." "..target.classIcon.." "..target.alliance)
 
-       --[[  frame.alliance:SetTexture(allianceIcons[GetUnitAlliance('reticleover')])
-        frame.alliance:SetHidden(false) ]]
+        frame.alliance:SetTexture(allianceIcons[GetUnitAlliance('reticleover')])
+        --frame.alliance:SetHidden(false)
 
         target.avaRank = GetAvARankIcon(GetUnitAvARank('reticleover'))
-        target.avaRankIcon = zo_iconFormat(target.avaRank, 28, 28)
+        target.avaRankIcon = zo_iconFormat(target.avaRank, iconSize.ava, iconSize.ava)
         target.title = GetUnitTitle('reticleover')
 
         if target.title == "" then target.title = GetAvARankName(GetUnitGender('reticleover'), GetUnitAvARank('reticleover')) end
@@ -264,10 +263,23 @@ function  BWE_HUD.UpdateTargetHealth()
     frame.value:SetText(current.." ("..percent.."%)")    
 end
 
-function BWE_HUD.UpdateTargetFrameAlpha()
+function BWE_HUD.ReinitFrame()
     local frame = BWE_HUD.targetFrame["BWE_TARGET"]
-    frame.bar:SetAlpha(BWE_HUD.SV.target.opacity.barAlpha)
+
+    if BWE_HUD.SV.target.custom.enabled == true then
+        frame.bar:SetColor(unpack(BWE_HUD.SV.target.custom.Color))
+    else
+        frame.bar:SetColor(unpack(BWE_HUD.SV.target.color))
+    end
+
+    frame.value:SetFont("$(BOLD_FONT)|"..BWE_HUD.SV.target.textSize.."|soft-shadow-thin")
+    frame.info:SetFont("$(BOLD_FONT)|"..BWE_HUD.SV.target.textSize.."|soft-shadow-thin")
+    frame.title:SetFont("$(BOLD_FONT)|"..BWE_HUD.SV.target.textSize.."|soft-shadow-thin")
+
+    frame:SetDimensions(BWE_HUD.SV.target.size.width, BWE_HUD.SV.target.size.height)
+
     frame.barBg:SetAlpha(BWE_HUD.SV.target.opacity.bgAlpha)
+    frame.bar:SetAlpha(BWE_HUD.SV.target.opacity.barAlpha)
     frame.gloss:SetAlpha(BWE_HUD.SV.target.opacity.glossAlpha)
 end
 
