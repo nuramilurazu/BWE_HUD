@@ -72,7 +72,7 @@ function BWE_HUD.CreateSettings()
                 [5] = {
                     type = "colorpicker",
                     name = "Target Frame Color",
-                    disabled = not BWE_HUD.SV.target.custom.enabled,
+                    disabled = not BWE_HUD.SV.target.enabled,
                     default = function() return unpack(BWE_HUD.SV.target.custom.Color) end,
                     getFunc = function() return unpack(BWE_HUD.SV.target.custom.Color) end,
                     setFunc = function(r, g, b, a) 
@@ -160,15 +160,15 @@ function BWE_HUD.CreateSettings()
                 },
                 [13] = {
                     type = "slider",
-                    name = "Bar Hight",
+                    name = "Bar Height",
                     min = 40,
                     max = 100,
                     step = 5,
                     disabled = not BWE_HUD.SV.target.enabled,
-                    default = BWE_HUD.defaults.target.size.hight,
-                    getFunc = function() return zo_round(BWE_HUD.SV.target.size.hight) end,
+                    default = BWE_HUD.defaults.target.size.height,
+                    getFunc = function() return zo_round(BWE_HUD.SV.target.size.height) end,
                     setFunc = function(newValue) 
-                        BWE_HUD.SV.target.size.hight = zo_round(newValue)
+                        BWE_HUD.SV.target.size.height = zo_round(newValue)
                         BWE_HUD.ReinitFrame()
                     end,
                 },                

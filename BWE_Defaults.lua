@@ -12,7 +12,7 @@ BWE_HUD.defaults = {
             bgAlpha    = 0.8,
         },
         size = {
-            hight = 40,
+            height = 40,
             width = 300,
         },
         custom = {
@@ -35,7 +35,7 @@ BWE_HUD.defaults = {
             bgAlpha    = 0.8,
         },
         size = {
-            hight = 63,
+            height = 63,
             width = 200,
         },
         custom = {
@@ -57,7 +57,7 @@ BWE_HUD.defaults = {
 }
 
 local iconSize = BWE_HUD
-iconSize.class = 28
-iconSize.champ = 15
-iconSize.ava   = 28
-iconSize.ally  = 28
+iconSize.class = 18
+iconSize.champ = 10
+iconSize.ava   = 18
+iconSize.ally  = 18

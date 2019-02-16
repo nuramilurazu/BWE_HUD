@@ -48,7 +48,7 @@ function BWE_HUD.CreateTargetControls()
     local frame = {}
 
     frame = wim:CreateControl("BWE_TARGET", BWE_HUD.targetContainer, CT_CONTROL)
-	frame:SetDimensions(300, 50)
+	frame:SetDimensions(tlw:GetDimensions())
 	frame:SetAnchor(TOPLEFT, BWE_HUD.targetContainer, TOPLEFT)
     frame:SetMouseEnabled(true)
 
@@ -66,7 +66,8 @@ function BWE_HUD.CreateTargetControls()
     frame.barBg:SetInheritAlpha(false)
 
     frame.bar = wim:CreateControl(nil, frame.statusBar, CT_STATUSBAR)
-    frame.bar:SetDimensions(frame.statusBar:GetWidth()-(4*sf), frame.statusBar:GetHeight()-(4*sf))
+    frame.bar:SetDimensions(frame:GetDimensions())
+    --frame.bar:SetDimensions(frame.statusBar:GetWidth()-(4*sf), frame.statusBar:GetHeight()-(4*sf))
 	frame.bar:SetAnchor(TOP, frame.statusBar, TOP, 0, (2*sf))
     frame.bar:SetDrawLayer(0)
 	frame.bar:SetDrawLevel(1)
@@ -107,7 +108,7 @@ function BWE_HUD.CreateTargetControls()
     
     frame.title = wim:CreateControl(nil, frame, CT_LABEL)
     frame.title:SetDimensions(frame:GetWidth(), 15)
-    frame.title:SetAnchor(BOTTOMLEFT, frame.statusBar, BOTTOMLEFT, 2*sf, 13*sf)
+    frame.title:SetAnchor(BOTTOMLEFT, frame.statusBar, BOTTOMLEFT, -(2*sf), 13*sf)
     frame.title:SetDrawLayer(1)
     frame.title:SetDrawLevel(4)
     frame.title:SetVerticalAlignment(TEXT_ALIGN_CENTER)
@@ -129,17 +130,25 @@ end
 function BWE_HUD.InitializeFrame()
     local frame = BWE_HUD.targetFrame["BWE_TARGET"]
 
+    local textSize = BWE_HUD.SV.target.textSize
+    local iconSize = BWE_HUD
+
     if BWE_HUD.SV.target.custom.enabled == true then
         frame.bar:SetColor(unpack(BWE_HUD.SV.target.custom.Color))
     else
         frame.bar:SetColor(unpack(BWE_HUD.SV.target.color))
     end
 
-    frame.value:SetFont("$(BOLD_FONT)|"..BWE_HUD.SV.target.textSize.."|soft-shadow-thin")
-    frame.info:SetFont("$(BOLD_FONT)|"..BWE_HUD.SV.target.textSize.."|soft-shadow-thin")
-    frame.title:SetFont("$(BOLD_FONT)|"..BWE_HUD.SV.target.textSize.."|soft-shadow-thin")
+    iconSize.class = textSize+(4*sf)
+    iconSize.champ = textSize-(1*sf)
+    iconSize.ava   = textSize+(4*sf)
+    iconSize.ally  = textSize+(4*sf)
 
-    frame:SetDimensions(BWE_HUD.SV.target.size.width, BWE_HUD.SV.target.size.height)
+    frame.value:SetFont("$(BOLD_FONT)|"..textSize.."|soft-shadow-thin")
+    frame.info:SetFont("$(BOLD_FONT)|"..textSize.."|soft-shadow-thin")
+    frame.title:SetFont("$(BOLD_FONT)|"..textSize.."|soft-shadow-thin")
+
+    BWE_HUD.targetContainer:SetDimensions(BWE_HUD.SV.target.size.width, BWE_HUD.SV.target.size.height)
 
     frame.barBg:SetAlpha(BWE_HUD.SV.target.opacity.bgAlpha)
     frame.bar:SetAlpha(BWE_HUD.SV.target.opacity.barAlpha)
@@ -164,6 +173,7 @@ end
 
 function BWE_HUD.UpdateTargetFrame()
     local frame = BWE_HUD.targetFrame["BWE_TARGET"]
+    local iconSize = BWE_HUD
 
     ZO_TargetUnitFramereticleover:SetHidden(true)    
 
@@ -265,18 +275,26 @@ end
 
 function BWE_HUD.ReinitFrame()
     local frame = BWE_HUD.targetFrame["BWE_TARGET"]
+    local iconSize = BWE_HUD    
+
+    local textSize = BWE_HUD.SV.target.textSize
 
     if BWE_HUD.SV.target.custom.enabled == true then
         frame.bar:SetColor(unpack(BWE_HUD.SV.target.custom.Color))
     else
         frame.bar:SetColor(unpack(BWE_HUD.SV.target.color))
-    end
+    end   
 
-    frame.value:SetFont("$(BOLD_FONT)|"..BWE_HUD.SV.target.textSize.."|soft-shadow-thin")
-    frame.info:SetFont("$(BOLD_FONT)|"..BWE_HUD.SV.target.textSize.."|soft-shadow-thin")
-    frame.title:SetFont("$(BOLD_FONT)|"..BWE_HUD.SV.target.textSize.."|soft-shadow-thin")
+    iconSize.class = textSize+(4*sf)
+    iconSize.champ = textSize-(1*sf)
+    iconSize.ava   = textSize+(4*sf)
+    iconSize.ally  = textSize+(4*sf)
 
-    frame:SetDimensions(BWE_HUD.SV.target.size.width, BWE_HUD.SV.target.size.height)
+    frame.value:SetFont("$(BOLD_FONT)|"..textSize.."|soft-shadow-thin")
+    frame.info:SetFont("$(BOLD_FONT)|"..textSize.."|soft-shadow-thin")
+    frame.title:SetFont("$(BOLD_FONT)|"..textSize.."|soft-shadow-thin")
+
+    BWE_HUD.targetContainer:SetDimensions(BWE_HUD.SV.target.size.width, BWE_HUD.SV.target.size.height)
 
     frame.barBg:SetAlpha(BWE_HUD.SV.target.opacity.bgAlpha)
     frame.bar:SetAlpha(BWE_HUD.SV.target.opacity.barAlpha)
