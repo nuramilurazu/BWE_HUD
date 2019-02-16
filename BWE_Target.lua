@@ -15,6 +15,12 @@ local allianceIcons = {
 
 function BWE_HUD.targetUnlocker(value)
     local frame = BWE_HUD.targetFrame["BWE_TARGET"]
+
+    if value == true then 
+        BWE_HUD.UnregisterTargetEvents()
+    else
+        BWE_HUD.RegisterTargetEvents()
+    end
     
 	BWE_HUD.targetContainer:SetMovable(value)
 	BWE_HUD.targetContainer:SetMouseEnabled(value)
@@ -102,7 +108,7 @@ function BWE_HUD.CreateTargetControls()
     
     frame.title = wim:CreateControl(nil, frame, CT_LABEL)
     frame.title:SetDimensions(frame:GetWidth(), 15)
-    frame.title:SetAnchor(BOTTOMLEFT, frame.statusBar, BOTTOMLEFT, 2*sf, 12*sf)
+    frame.title:SetAnchor(BOTTOMLEFT, frame.statusBar, BOTTOMLEFT, 2*sf, 13*sf)
     frame.title:SetDrawLayer(1)
     frame.title:SetDrawLevel(4)
     frame.title:SetVerticalAlignment(TEXT_ALIGN_CENTER)
@@ -146,7 +152,7 @@ function BWE_HUD.InitializeFrame()
     frame.bar:SetAlpha(BWE_HUD.SV.target.opacity.barAlpha)
     frame.gloss:SetAlpha(BWE_HUD.SV.target.opacity.glossAlpha)
     
-    zo_callLater(BWE_HUD.RegisterTargetEvents, 3000)
+    zo_callLater(BWE_HUD.RegisterTargetEvents, 2000)
 end
 
 function BWE_HUD.SaveTargetFrameLocation()
@@ -193,7 +199,7 @@ function BWE_HUD.UpdateTargetFrame()
         end
 
         target.class = GetClassIcon(GetUnitClassId('reticleover'))
-        target.classIcon = zo_iconFormat(target.class, 15, 15)
+        target.classIcon = zo_iconFormat(target.class, 28, 28)
 		target.alliance = zo_iconFormat(allianceIcons[GetUnitAlliance('reticleover')], 28, 28)
 
         frame.info:SetText(target.name..target.lvl.." "..target.classIcon.." "..target.alliance)
@@ -202,7 +208,7 @@ function BWE_HUD.UpdateTargetFrame()
         frame.alliance:SetHidden(false) ]]
 
         target.avaRank = GetAvARankIcon(GetUnitAvARank('reticleover'))
-        target.avaRankIcon = zo_iconFormat(target.avaRank, 15, 15)
+        target.avaRankIcon = zo_iconFormat(target.avaRank, 28, 28)
         target.title = GetUnitTitle('reticleover')
 
         if target.title == "" then target.title = GetAvARankName(GetUnitGender('reticleover'), GetUnitAvARank('reticleover')) end
@@ -276,6 +282,12 @@ function BWE_HUD.CombatState()
 		frame.bar:SetAlpha(BWE_HUD.SV.target.opacity.barAlpha)
         frame.gloss:SetAlpha(BWE_HUD.SV.target.opacity.glossAlpha)
 	end
+end
+
+function BWE_HUD.UnregisterTargetEvents()
+    evm:UnregisterForEvent(BWE_HUD.ADDON_NAME, EVENT_RETICLE_TARGET_CHANGED)
+    evm:UnregisterForEvent(BWE_HUD.ADDON_NAME, EVENT_COMBAT_EVENT)
+    evm:UnregisterForEvent(BWE_HUD.ADDON_NAME, EVENT_PLAYER_COMBAT_STATE)
 end
 
 function BWE_HUD.RegisterTargetEvents()
