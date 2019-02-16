@@ -22,7 +22,8 @@ BWE_HUD.defaults = {
         color    = {128, 0, 0, 1},   --ZO_POWER_BAR_GRADIENT_COLORS[POWERTYPE_HEALTH],
         textSize = 12,
         useACCID = false,
-        enabled   = false,
+        enabled  = false,
+        uRColor  = false,
     },
     player = {
         position = {

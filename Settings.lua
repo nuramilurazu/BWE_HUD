@@ -63,13 +63,22 @@ function BWE_HUD.CreateSettings()
                 },
                 [4] = {
                     type = "checkbox",
+                    name = "Use Specific Target Colors",
+                    tooltip = "Enemies=Red Guards=Yellow",    
+                    disabled = not BWE_HUD.SV.target.enabled,
+                    default = BWE_HUD.defaults.target.uRColor,
+                    getFunc = function() return BWE_HUD.SV.target.uRColor end,
+                    setFunc = function(newValue) BWE_HUD.SV.target.uRColor = newValue end,
+                },
+                [5] = {
+                    type = "checkbox",
                     name = "Use Custom Color",
                     disabled = not BWE_HUD.SV.target.enabled,
                     default = BWE_HUD.defaults.target.custom.enabled,
                     getFunc = function() return BWE_HUD.SV.target.custom.enabled end,
                     setFunc = function(newValue) BWE_HUD.SV.target.custom.enabled = newValue end,
                 },
-                [5] = {
+                [6] = {
                     type = "colorpicker",
                     name = "Target Frame Color",
                     disabled = not BWE_HUD.SV.target.enabled,
@@ -80,11 +89,11 @@ function BWE_HUD.CreateSettings()
                         BWE_HUD.ReinitFrame()
                     end,
                 },
-                [6] = {
+                [7] = {
                     type = "header",
                     name = "Opacity Settings",
                 },
-                [7] = {
+                [8] = {
                     type = "slider",
                     name = "Target Frame Opacity",
                     min = 10,
@@ -98,7 +107,7 @@ function BWE_HUD.CreateSettings()
                         BWE_HUD.ReinitFrame()
                     end,
                 },
-                [8] = {
+                [9] = {
                     type = "slider",
                     name = "Background Opacity",
                     min = 0,
@@ -112,7 +121,7 @@ function BWE_HUD.CreateSettings()
                         BWE_HUD.ReinitFrame()
                     end,
                 },
-                [9] = {
+                [10] = {
                     type = "slider",
                     name = "Gloss Opacity",
                     min = 0,
@@ -126,11 +135,11 @@ function BWE_HUD.CreateSettings()
                         BWE_HUD.ReinitFrame()
                     end,
                 },
-                [10] = {
+                [11] = {
                     type = "header",
                     name = "Size Settings",
                 },
-                [11] = {
+                [12] = {
                     type = "slider",
                     name = "Text Size",
                     min = 12,
@@ -144,7 +153,7 @@ function BWE_HUD.CreateSettings()
                         BWE_HUD.ReinitFrame()
                     end,
                 },
-                [12] = {
+                [13] = {
                     type = "slider",
                     name = "Bar Width",
                     min = 125,
@@ -158,7 +167,7 @@ function BWE_HUD.CreateSettings()
                         BWE_HUD.ReinitFrame()
                     end,
                 },
-                [13] = {
+                [14] = {
                     type = "slider",
                     name = "Bar Height",
                     min = 40,

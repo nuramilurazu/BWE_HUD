@@ -48,7 +48,7 @@ function BWE_HUD.CreateTargetControls()
     local frame = {}
 
     frame = wim:CreateControl("BWE_TARGET", BWE_HUD.targetContainer, CT_CONTROL)
-	frame:SetDimensions(400, 50)
+	frame:SetDimensions(300, 50)
 	frame:SetAnchor(TOPLEFT, BWE_HUD.targetContainer, TOPLEFT)
     frame:SetMouseEnabled(true)
 
@@ -149,6 +149,7 @@ function BWE_HUD.InitializeFrame()
     frame.title:SetFont("$(BOLD_FONT)|"..textSize.."|soft-shadow-thin")
 
     BWE_HUD.targetContainer:SetDimensions(BWE_HUD.SV.target.size.width, BWE_HUD.SV.target.size.height)
+    frame:SetDimensions(BWE_HUD.SV.target.size.width, BWE_HUD.SV.target.size.height)
 
     frame.barBg:SetAlpha(BWE_HUD.SV.target.opacity.bgAlpha)
     frame.bar:SetAlpha(BWE_HUD.SV.target.opacity.barAlpha)
@@ -178,6 +179,8 @@ function BWE_HUD.UpdateTargetFrame()
     ZO_TargetUnitFramereticleover:SetHidden(true)    
 
 	if (not DoesUnitExist('reticleover')) then frame:SetHidden(true) return end
+    
+    if BWE_HUD.SV.target.uRColor == true then frame.bar:SetColor(GetUnitReactionColor("reticleover")) end
 
     local target = {
         name        = "",
@@ -295,6 +298,7 @@ function BWE_HUD.ReinitFrame()
     frame.title:SetFont("$(BOLD_FONT)|"..textSize.."|soft-shadow-thin")
 
     BWE_HUD.targetContainer:SetDimensions(BWE_HUD.SV.target.size.width, BWE_HUD.SV.target.size.height)
+    frame:SetDimensions(BWE_HUD.SV.target.size.width, BWE_HUD.SV.target.size.height)
 
     frame.barBg:SetAlpha(BWE_HUD.SV.target.opacity.bgAlpha)
     frame.bar:SetAlpha(BWE_HUD.SV.target.opacity.barAlpha)
@@ -316,12 +320,14 @@ end
 
 function BWE_HUD.UnregisterTargetEvents()
     evm:UnregisterForEvent(BWE_HUD.ADDON_NAME, EVENT_RETICLE_TARGET_CHANGED)
+    evm:UnregisterForEvent(BWE_HUD.ADDON_NAME, EVENT_DISPOSITION_UPDATE)
     evm:UnregisterForEvent(BWE_HUD.ADDON_NAME, EVENT_COMBAT_EVENT)
     evm:UnregisterForEvent(BWE_HUD.ADDON_NAME, EVENT_PLAYER_COMBAT_STATE)
 end
 
 function BWE_HUD.RegisterTargetEvents()
     evm:RegisterForEvent(BWE_HUD.ADDON_NAME, EVENT_RETICLE_TARGET_CHANGED, BWE_HUD.UpdateTargetFrame)
+    evm:RegisterForEvent(BWE_HUD.ADDON_NAME, EVENT_DISPOSITION_UPDATE, BWE_HUD.UpdateTargetFrame)
     evm:RegisterForEvent(BWE_HUD.ADDON_NAME, EVENT_COMBAT_EVENT, BWE_HUD.UpdateTargetHealth)
     evm:RegisterForEvent(BWE_HUD.ADDON_NAME, EVENT_PLAYER_COMBAT_STATE, BWE_HUD.CombatState)
 end
