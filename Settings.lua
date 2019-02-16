@@ -76,7 +76,10 @@ function BWE_HUD.CreateSettings()
                     disabled = not BWE_HUD.SV.target.enabled,
                     default = BWE_HUD.defaults.target.custom.enabled,
                     getFunc = function() return BWE_HUD.SV.target.custom.enabled end,
-                    setFunc = function(newValue) BWE_HUD.SV.target.custom.enabled = newValue end,
+                    setFunc = function(newValue) 
+                        BWE_HUD.SV.target.custom.enabled = newValue 
+                        BWE_HUD.ReinitFrame()
+                    end,
                 },
                 [6] = {
                     type = "colorpicker",
