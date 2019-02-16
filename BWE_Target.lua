@@ -13,9 +13,27 @@ local allianceIcons = {
 	[3]			= [[/esoui/art/guild/guildbanner_icon_daggerfall.dds]],
 }
 
-function BWE_HUD.targetUnlocker(value)
+SLASH_COMMANDS["/unlocktarget"] = function()
     local frame = BWE_HUD.targetFrame["BWE_TARGET"]
 
+    if BWE_HUD.targetUnlock == false then
+        BWE_HUD.targetContainer:SetMovable(true)
+        BWE_HUD.targetContainer:SetMouseEnabled(true)
+        frame:SetHidden(false)
+        frame:SetMovable(true)
+        frame:SetMouseEnabled(true)
+    else
+        BWE_HUD.targetContainer:SetMovable(false)
+        BWE_HUD.targetContainer:SetMouseEnabled(false)
+        frame:SetHidden(true)
+        frame:SetMovable(false)
+        frame:SetMouseEnabled(false)
+    end
+end
+
+function BWE_HUD.targetUnlocker(value)
+    local frame = BWE_HUD.targetFrame["BWE_TARGET"]
+    
     frame:SetHidden(not Value)
     frame:SetMovable(value)
     frame:SetMouseEnabled(value)
@@ -31,7 +49,7 @@ function BWE_HUD.CreateTargetControls()
     tlw:SetMovable(false)
     tlw:SetMouseEnabled(false)
     tlw:SetClampedToScreen(true)
-    tlw:SetHidden(true)
+    tlw:SetHidden(false)
 
 	if BWE_HUD.Debug == true then tlw:SetHidden(false) end  
 
@@ -128,6 +146,8 @@ end
 
 function BWE_HUD.InitializeFrame()
     local frame = BWE_HUD.targetFrame["BWE_TARGET"]
+
+    frame:SetHidden(true)
 
     if BWE_HUD.SV.target.custom.enabled == true then
         frame.bar:SetColor(unpack(BWE_HUD.SV.target.custom.color))
