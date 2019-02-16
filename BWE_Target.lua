@@ -22,6 +22,8 @@ function BWE_HUD.targetUnlocker(value)
     else
         BWE_HUD.RegisterTargetEvents()
     end
+
+    BWE_HUD.targetUnlock = value
     
 	BWE_HUD.targetContainer:SetMovable(value)
 	BWE_HUD.targetContainer:SetMouseEnabled(value)
@@ -214,7 +216,7 @@ function BWE_HUD.UpdateTargetFrame()
         target.classIcon = zo_iconFormat(target.class, iconSize.class, iconSize.class)
 		target.alliance = zo_iconFormat(allianceIcons[GetUnitAlliance('reticleover')], iconSize.ally, iconSize.ally)
 
-        frame.info:SetText(target.name..target.lvl.." "..target.classIcon.." "..target.alliance)
+        frame.info:SetText(target.name..target.classIcon..target.lvl)
 
         frame.alliance:SetTexture(allianceIcons[GetUnitAlliance('reticleover')])
         --frame.alliance:SetHidden(false)
@@ -224,7 +226,7 @@ function BWE_HUD.UpdateTargetFrame()
         target.title = GetUnitTitle('reticleover')
 
         if target.title == "" then target.title = GetAvARankName(GetUnitGender('reticleover'), GetUnitAvARank('reticleover')) end
-        frame.title:SetText(target.avaRankIcon.." "..target.title)
+        frame.title:SetText(target.alliance.." "..target.avaRankIcon.." "..target.title)
 
         BWE_HUD.UpdateTargetHealth()
         frame:SetHidden(false)
@@ -257,7 +259,7 @@ function  BWE_HUD.UpdateTargetHealth()
     local frame = BWE_HUD.targetFrame["BWE_TARGET"]
     local current, max, effectiveMax = GetUnitPower('reticleover', POWERTYPE_HEALTH)
 
-	if current <= 0 then frame:SetHidden(true) return end
+    if current <= 0 then frame:SetHidden(true) return end
 
     local percent = 0
     if maximum ~= 0 then
@@ -272,8 +274,16 @@ function  BWE_HUD.UpdateTargetHealth()
     frame.bar:SetMinMax(0, max)
     frame.bar:SetValue(current)
 	frame.gloss:SetMinMax(0, max)
-	frame.gloss:SetValue(current)
-    frame.value:SetText(current.." ("..percent.."%)")    
+    frame.gloss:SetValue(current)
+
+    if (current > 1000000) then
+        current =  current/1000000
+        current = ZO_LocalizeDecimalNumber(zo_roundToNearest(current, .0001))
+        frame.value:SetText(current.."M ("..percent.."%)")
+    else 
+        frame.value:SetText(BWE_HUD.comma_value(current).." ("..percent.."%)")   
+    end	 
+
 end
 
 function BWE_HUD.ReinitFrame()

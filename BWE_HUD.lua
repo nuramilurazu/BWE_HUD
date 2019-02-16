@@ -9,6 +9,22 @@ BWE_HUD.ADDON_SETTINGS  = 1.3
 BWE_HUD.menuName        = "BWE_HUD Options"
 BWE_HUD.Debug			= false
 
+local strgsub			= string.gsub
+local captureStr		= '%1' .. "," .. '%2'
+local k
+
+function BWE_HUD.comma_value(amount)
+	while (true) do
+		amount, k = strgsub(amount, '^(-?%d+)(%d%d%d)', captureStr)
+
+		if (k == 0) then
+			break
+		end
+	end
+
+	return amount
+end
+
 function BWE_HUD.OnAddOnLoaded(event, addonName)
     if addonName ~= BWE_HUD.ADDON_NAME then return end
     
