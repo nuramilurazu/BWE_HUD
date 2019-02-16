@@ -1,20 +1,14 @@
-BWE_HUD = {
-    ADDON_NAME      = "BWE_HUD",  
-    ADDON_AUTHOR    = "Nurami",
-    ADDON_VERSION   = "0.1",
-    ADDON_SETTINGS  = 2,
-    color           = "DDFFEE",             
-    menuName        = "BWE_HUD Options",
-}
+BWE_HUD = BWE_HUD or {}
 
-function BWE_HUD.Colorize(text, color)
-    -- Default to addon's .color.
-    if not color then color = BWE_HUD.color end
-
-    text = "|c" .. color .. text .. "|r"
-
-    return text
-end
+local evm = GetEventManager()
+local wim = GetWindowManager()
+    
+BWE_HUD.ADDON_NAME      = "BWE_HUD"
+BWE_HUD.ADDON_AUTHOR    = "Nurami"
+BWE_HUD.ADDON_VERSION   = 0.1
+BWE_HUD.ADDON_SETTINGS  = 1      
+BWE_HUD.menuName        = "BWE_HUD Options"
+BWE_HUD.Debug			= false
 
 function BWE_HUD.OnAddOnLoaded(event, addonName)
     if addonName ~= BWE_HUD.ADDON_NAME then return end
@@ -24,14 +18,25 @@ end
 
 function BWE_HUD:Initialize()
 
-    BWE_HUD.savedVariables = ZO_SavedVars:NewAccountWide("BWE_HUD_SV", ADDON_SETTINGS, nil, BWE_HUD.savedVariables)
+    BWE_HUD.SV = ZO_SavedVars:NewAccountWide("BWE_HUD_SV", BWE_HUD.ADDON_SETTINGS, nil, BWE_HUD.defaults)
     
     BWE_HUD.CreateSettings()
-    --BWE_HUD.CreateTargetControls
-    --BWE_HUD.CreatePlayerControls
 
-    EVENT_MANAGER:UnregisterForEvent(BWE_HUD.ADDON_NAME, EVENT_ADD_ON_LOADED)
+    if BWE_HUD.SV.target.enabled == true then 
+        BWE_HUD.CreateTargetControls() 
+        BWE_HUD.InitializeFrame()
+
+        ZO_TargetUnitFramereticleover:SetHidden(true)
+
+        BWE_HUD.targetContainer:ClearAnchors()
+        BWE_HUD.targetContainer:SetAnchor(TOPLEFT, GuiRoot, TOPLEFT, BWE_HUD.SV.target.position.offsetX, BWE_HUD.SV.target.position.offsetY)
+        BWE_HUD.targetContainer:SetHandler("OnMoveStop", BWE_HUD.SaveTargetFrameLocation)
+    end
     
+    --if BWE_HUD_SV.player.enabled == true then BWE_HUD.CreatePlayerControls() end
+
+    evm:UnregisterForEvent(BWE_HUD.ADDON_NAME, EVENT_ADD_ON_LOADED)
+
 end
 
-EVENT_MANAGER:RegisterForEvent(BWE_HUD.ADDON_NAME, EVENT_ADD_ON_LOADED, BWE_HUD.OnAddOnLoaded)
+evm:RegisterForEvent(BWE_HUD.ADDON_NAME, EVENT_ADD_ON_LOADED, BWE_HUD.OnAddOnLoaded)

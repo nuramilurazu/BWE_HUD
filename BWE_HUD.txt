@@ -9,26 +9,24 @@
 Languages\en.lua
 Languages\$(language).lua
 
-BWE_HUD.xml
+Libs\LibStub\LibStub.lua
 
-LibStub\LibStub.lua
+Libs\LibAddonMenu-2.0\LibAddonMenu-2.0.lua
 
-LibAddonMenu-2.0\LibAddonMenu-2.0.lua
-
-LibAddonMenu-2.0\controls\panel.lua
-LibAddonMenu-2.0\controls\submenu.lua
-LibAddonMenu-2.0\controls\button.lua
-LibAddonMenu-2.0\controls\checkbox.lua
-LibAddonMenu-2.0\controls\colorpicker.lua
-LibAddonMenu-2.0\controls\custom.lua
-LibAddonMenu-2.0\controls\description.lua
-LibAddonMenu-2.0\controls\dropdown.lua
-LibAddonMenu-2.0\controls\editbox.lua
-LibAddonMenu-2.0\controls\header.lua
-LibAddonMenu-2.0\controls\slider.lua
-LibAddonMenu-2.0\controls\texture.lua
-LibAddonMenu-2.0\controls\iconpicker.lua
-LibAddonMenu-2.0\controls\divider.lua
+Libs\LibAddonMenu-2.0\controls\panel.lua
+Libs\LibAddonMenu-2.0\controls\submenu.lua
+Libs\LibAddonMenu-2.0\controls\button.lua
+Libs\LibAddonMenu-2.0\controls\checkbox.lua
+Libs\LibAddonMenu-2.0\controls\colorpicker.lua
+Libs\LibAddonMenu-2.0\controls\custom.lua
+Libs\LibAddonMenu-2.0\controls\description.lua
+Libs\LibAddonMenu-2.0\controls\dropdown.lua
+Libs\LibAddonMenu-2.0\controls\editbox.lua
+Libs\LibAddonMenu-2.0\controls\header.lua
+Libs\LibAddonMenu-2.0\controls\slider.lua
+Libs\LibAddonMenu-2.0\controls\texture.lua
+Libs\LibAddonMenu-2.0\controls\iconpicker.lua
+Libs\LibAddonMenu-2.0\controls\divider.lua
 
 BWE_Defaults.lua
 BWE_HUD.lua
