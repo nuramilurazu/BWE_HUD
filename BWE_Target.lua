@@ -244,7 +244,20 @@ function BWE_HUD.UpdateTargetFrame()
         end    
         
         target.title = GetUnitCaption('reticleover')
-        frame.title:SetText(target.title)
+		
+		if target.title == "" or target.title == nil then
+			frame.title:SetText("")
+		else
+			if string.char(string.byte(target.title, 1 , 5)) == "Guild" then
+				local startValue = string.find( target.title, "%(" ) + 1
+				local endValue = string.len(target.title) - 1
+				target.title = string.sub(target.title, startValue, endValue)
+				frame.title:SetText(target.title)
+			else
+				frame.title:SetText(target.title)
+			end
+		end
+
         target.name = GetUnitName('reticleover')
         frame.info:SetText(target.name)
 
