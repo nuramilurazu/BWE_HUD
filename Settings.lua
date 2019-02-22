@@ -33,7 +33,7 @@ function BWE_HUD.CreateSettings()
                     BWE_HUD.SV.target.enabled = newValue
                     ReloadUI()
                 end,
-                warning = "Requires UI Reload"
+                warning = "Requires UI Reload",
         })
     
         table.insert(optionsTable, {
@@ -165,24 +165,20 @@ function BWE_HUD.CreateSettings()
                     disabled = not BWE_HUD.SV.target.enabled,
                     default = BWE_HUD.defaults.target.size.width,
                     getFunc = function() return zo_round(BWE_HUD.SV.target.size.width) end,
-                    setFunc = function(newValue) 
-                        BWE_HUD.SV.target.size.width = zo_round(newValue)
-                        BWE_HUD.ReinitFrame()
-                    end,
+                    setFunc = function(newValue) BWE_HUD.SV.target.size.width = zo_round(newValue) end,
+                    warning = "Requires UI Reload",
                 },
                 [14] = {
                     type = "slider",
                     name = "Bar Height",
-                    min = 40,
+                    min = 30,
                     max = 100,
                     step = 5,
                     disabled = not BWE_HUD.SV.target.enabled,
                     default = BWE_HUD.defaults.target.size.height,
                     getFunc = function() return zo_round(BWE_HUD.SV.target.size.height) end,
-                    setFunc = function(newValue) 
-                        BWE_HUD.SV.target.size.height = zo_round(newValue)
-                        BWE_HUD.ReinitFrame()
-                    end,
+                    setFunc = function(newValue) BWE_HUD.SV.target.size.height = zo_round(newValue) end,
+                    warning = "Requires UI Reload",
                 },                
             },
         })

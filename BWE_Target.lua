@@ -3,7 +3,7 @@ local evm = GetEventManager()
 local wim = GetWindowManager()
 local sf = 1/GetSetting(SETTING_TYPE_UI, UI_SETTING_CUSTOM_SCALE)
 
-BWE_HUD.targetContainer = {}
+--BWE_HUD.targetContainer = {}
 BWE_HUD.targetFrame = {}
 BWE_HUD.targetUnlock = false
 
@@ -19,14 +19,16 @@ function BWE_HUD.targetUnlocker(value)
 
     if value == true then 
         BWE_HUD.UnregisterTargetEvents()
-    else
+    else        
+        BWE_HUD.SV.target.position.offsetX = zo_round(frame:GetLeft())
+        BWE_HUD.SV.target.position.offsetY = zo_round(frame:GetTop())
         BWE_HUD.RegisterTargetEvents()
     end
 
     BWE_HUD.targetUnlock = value
     
-	BWE_HUD.targetContainer:SetMovable(value)
-	BWE_HUD.targetContainer:SetMouseEnabled(value)
+	--BWE_HUD.targetContainer:SetMovable(value)
+	--BWE_HUD.targetContainer:SetMouseEnabled(value)
     
     frame:SetHidden(not value)
     frame:SetMovable(value)
@@ -35,7 +37,7 @@ function BWE_HUD.targetUnlocker(value)
 end
 
 function BWE_HUD.CreateTargetControls()
-    local tlw = {}
+    --[[ local tlw = {}
 
     tlw = wim:CreateTopLevelWindow()
     tlw:SetDimensions(300, 50)
@@ -45,13 +47,13 @@ function BWE_HUD.CreateTargetControls()
     tlw:SetClampedToScreen(true)
     tlw:SetHidden(false) 
 
-    BWE_HUD.targetContainer = tlw
+    BWE_HUD.targetContainer = tlw ]]
 
     local frame = {}
 
-    frame = wim:CreateControl("BWE_TARGET", BWE_HUD.targetContainer, CT_CONTROL)
-	frame:SetDimensions(300, 50)
-	frame:SetAnchor(TOPLEFT, BWE_HUD.targetContainer, TOPLEFT)
+    frame = wim:CreateControl("BWE_TARGET", BWE_HUD.container, CT_CONTROL)
+	frame:SetDimensions(BWE_HUD.SV.target.size.width, BWE_HUD.SV.target.size.height)
+	frame:SetAnchor(TOPLEFT, BWE_HUD.container, TOPLEFT, BWE_HUD.SV.target.position.offsetX, BWE_HUD.SV.target.position.offsetY)
     frame:SetMouseEnabled(true)
 
     frame.statusBar = wim:CreateControl(nil, frame, CT_CONTROL)
@@ -68,7 +70,6 @@ function BWE_HUD.CreateTargetControls()
     frame.barBg:SetInheritAlpha(false)
 
     frame.bar = wim:CreateControl(nil, frame.statusBar, CT_STATUSBAR)
-    --frame.bar:SetDimensions(frame:GetDimensions())
     frame.bar:SetDimensions(frame.statusBar:GetWidth()-(4*sf), frame.statusBar:GetHeight()-(4*sf))
 	frame.bar:SetAnchor(TOP, frame.statusBar, TOP, 0, (2*sf))
     frame.bar:SetDrawLayer(0)
@@ -150,8 +151,8 @@ function BWE_HUD.InitializeFrame()
     frame.info:SetFont("$(BOLD_FONT)|"..textSize.."|soft-shadow-thin")
     frame.title:SetFont("$(BOLD_FONT)|"..textSize.."|soft-shadow-thin")
 
-    BWE_HUD.targetContainer:SetDimensions(BWE_HUD.SV.target.size.width, BWE_HUD.SV.target.size.height)
-    frame:SetDimensions(BWE_HUD.SV.target.size.width, BWE_HUD.SV.target.size.height)
+    --BWE_HUD.targetContainer:SetDimensions(BWE_HUD.SV.target.size.width, BWE_HUD.SV.target.size.height)
+    --frame:SetDimensions(BWE_HUD.SV.target.size.width, BWE_HUD.SV.target.size.height)
 
     frame.barBg:SetAlpha(BWE_HUD.SV.target.opacity.bgAlpha)
     frame.bar:SetAlpha(BWE_HUD.SV.target.opacity.barAlpha)
@@ -170,8 +171,8 @@ function BWE_HUD.SaveTargetFrameLocation()
     BWE_HUD.SV.target.position.offsetX = zo_round(BWE_HUD.targetContainer:GetLeft())
     BWE_HUD.SV.target.position.offsetY = zo_round(BWE_HUD.targetContainer:GetTop())
 
-    BWE_HUD.targetContainer:ClearAnchors()
-    BWE_HUD.targetContainer:SetAnchor(TOPLEFT, GuiRoot, TOPLEFT, BWE_HUD.SV.target.position.offsetX, BWE_HUD.SV.target.position.offsetY)
+    --BWE_HUD.targetContainer:ClearAnchors()
+    --BWE_HUD.targetContainer:SetAnchor(TOPLEFT, GuiRoot, TOPLEFT, BWE_HUD.SV.target.position.offsetX, BWE_HUD.SV.target.position.offsetY)
 end
 
 function BWE_HUD.UpdateTargetFrame()
@@ -259,7 +260,7 @@ function BWE_HUD.UpdateTargetFrame()
 		end
 
         target.name = GetUnitName('reticleover')
-        frame.info:SetText(target.name)
+        frame.info:SetText("|cFFFFFF"..target.name.."|")
 
         BWE_HUD.UpdateTargetHealth()
         frame:SetHidden(false)
@@ -291,7 +292,7 @@ function  BWE_HUD.UpdateTargetHealth()
 
     if (current > 1000000) then
         current =  current/1000000
-        current = ZO_LocalizeDecimalNumber(zo_roundToNearest(current, .0001))
+        current = ZO_LocalizeDecimalNumber(zo_roundToNearest(current, .001))
         frame.value:SetText(current.."M ("..percent.."%)")
     else 
         frame.value:SetText(BWE_HUD.comma_value(current).." ("..percent.."%)")   
@@ -320,8 +321,8 @@ function BWE_HUD.ReinitFrame()
     frame.info:SetFont("$(BOLD_FONT)|"..textSize.."|soft-shadow-thin")
     frame.title:SetFont("$(BOLD_FONT)|"..textSize.."|soft-shadow-thin")
 
-    BWE_HUD.targetContainer:SetDimensions(BWE_HUD.SV.target.size.width, BWE_HUD.SV.target.size.height)
-    frame:SetDimensions(BWE_HUD.SV.target.size.width, BWE_HUD.SV.target.size.height)
+    --BWE_HUD.targetContainer:SetDimensions(BWE_HUD.SV.target.size.width, BWE_HUD.SV.target.size.height)
+    --frame:SetDimensions(BWE_HUD.SV.target.size.width, BWE_HUD.SV.target.size.height)
 
     frame.barBg:SetAlpha(BWE_HUD.SV.target.opacity.bgAlpha)
     frame.bar:SetAlpha(BWE_HUD.SV.target.opacity.barAlpha)
