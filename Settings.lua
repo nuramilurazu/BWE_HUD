@@ -13,29 +13,29 @@ function BWE_HUD.CreateSettings()
                 registerForRefresh = true,
                 registerForDefaults = true,
         }
-        
+
         LAM2:RegisterAddonPanel(BWE_HUD.menuName, panelData)
 
         local optionsTable = {}
-    
+
     -- Category. --
         table.insert(optionsTable, {
             type = "header",
             name = ZO_HIGHLIGHT_TEXT:Colorize("Target Frame Settings"),
         })
-    
+
         table.insert(optionsTable, {
                 type = "checkbox",
                 name = "Use Target Frame",
                 default = BWE_HUD.SV.target.enabled,
                 getFunc = function() return BWE_HUD.SV.target.enabled end,
-                setFunc = function(newValue) 
+                setFunc = function(newValue)
                     BWE_HUD.SV.target.enabled = newValue
                     ReloadUI()
                 end,
                 warning = "Requires UI Reload",
         })
-    
+
         table.insert(optionsTable, {
             type = "submenu",
             name = "Target Frame",
@@ -46,12 +46,13 @@ function BWE_HUD.CreateSettings()
                     disabled = not BWE_HUD.SV.target.enabled,
                     default = BWE_HUD.targetUnlock,
                     getFunc = function() return BWE_HUD.targetUnlock end,
-                    setFunc = function(newValue) BWE_HUD.targetUnlocker(newValue) end,					
+                    setFunc = function(newValue) BWE_HUD.targetUnlocker(newValue) end,
+                    warning = "You must relock the frame to save it's Position",
                 },
                 [2] = {
                     type = "checkbox",
                     name = "Prefer User ID over Character Name",
-                    tooltip = "Use @Example instead",                    
+                    tooltip = "Use @Example instead",
                     disabled = not BWE_HUD.SV.target.enabled,
                     default = BWE_HUD.defaults.target.useACCID,
                     getFunc = function() return BWE_HUD.SV.target.useACCID end,
@@ -64,7 +65,7 @@ function BWE_HUD.CreateSettings()
                 [4] = {
                     type = "checkbox",
                     name = "Use Specific Target Colors",
-                    tooltip = "Enemies=Red Guards=Yellow",    
+                    tooltip = "Enemies=Red Guards=Yellow",
                     disabled = not BWE_HUD.SV.target.enabled,
                     default = BWE_HUD.defaults.target.uRColor,
                     getFunc = function() return BWE_HUD.SV.target.uRColor end,
@@ -76,8 +77,8 @@ function BWE_HUD.CreateSettings()
                     disabled = not BWE_HUD.SV.target.enabled,
                     default = BWE_HUD.defaults.target.custom.enabled,
                     getFunc = function() return BWE_HUD.SV.target.custom.enabled end,
-                    setFunc = function(newValue) 
-                        BWE_HUD.SV.target.custom.enabled = newValue 
+                    setFunc = function(newValue)
+                        BWE_HUD.SV.target.custom.enabled = newValue
                         BWE_HUD.ReinitFrame()
                     end,
                 },
@@ -87,8 +88,8 @@ function BWE_HUD.CreateSettings()
                     disabled = not BWE_HUD.SV.target.enabled,
                     default = function() return unpack(BWE_HUD.SV.target.custom.Color) end,
                     getFunc = function() return unpack(BWE_HUD.SV.target.custom.Color) end,
-                    setFunc = function(r, g, b, a) 
-                        BWE_HUD.SV.target.custom.Color = {r, g, b, a} 
+                    setFunc = function(r, g, b, a)
+                        BWE_HUD.SV.target.custom.Color = {r, g, b, a}
                         BWE_HUD.ReinitFrame()
                     end,
                 },
@@ -105,7 +106,7 @@ function BWE_HUD.CreateSettings()
                     disabled = not BWE_HUD.SV.target.enabled,
                     default = BWE_HUD.defaults.target.opacity.barAlpha,
                     getFunc = function() return zo_round(BWE_HUD.SV.target.opacity.barAlpha*100) end,
-                    setFunc = function(newValue) 
+                    setFunc = function(newValue)
                         BWE_HUD.SV.target.opacity.barAlpha = zo_roundToNearest((newValue/100), .01),
                         BWE_HUD.ReinitFrame()
                     end,
@@ -119,7 +120,7 @@ function BWE_HUD.CreateSettings()
                     disabled = not BWE_HUD.SV.target.enabled,
                     default = BWE_HUD.defaults.target.opacity.bgAlpha,
                     getFunc = function() return zo_round(BWE_HUD.SV.target.opacity.bgAlpha*100) end,
-                    setFunc = function(newValue) 
+                    setFunc = function(newValue)
                         BWE_HUD.SV.target.opacity.bgAlpha = zo_roundToNearest((newValue/100), .01),
                         BWE_HUD.ReinitFrame()
                     end,
@@ -133,7 +134,7 @@ function BWE_HUD.CreateSettings()
                     disabled = not BWE_HUD.SV.target.enabled,
                     default = BWE_HUD.defaults.target.opacity.glossAlpha,
                     getFunc = function() return zo_round(BWE_HUD.SV.target.opacity.glossAlpha*100) end,
-                    setFunc = function(newValue) 
+                    setFunc = function(newValue)
                         BWE_HUD.SV.target.opacity.glossAlpha = zo_roundToNearest((newValue/100), .01),
                         BWE_HUD.ReinitFrame()
                     end,
@@ -151,7 +152,7 @@ function BWE_HUD.CreateSettings()
                     disabled = not BWE_HUD.SV.target.enabled,
                     default = BWE_HUD.defaults.target.textSize,
                     getFunc = function() return zo_round(BWE_HUD.SV.target.textSize) end,
-                    setFunc = function(newValue) 
+                    setFunc = function(newValue)
                         BWE_HUD.SV.target.textSize = zo_round(newValue)
                         BWE_HUD.ReinitFrame()
                     end,
@@ -179,9 +180,9 @@ function BWE_HUD.CreateSettings()
                     getFunc = function() return zo_round(BWE_HUD.SV.target.size.height) end,
                     setFunc = function(newValue) BWE_HUD.SV.target.size.height = zo_round(newValue) end,
                     warning = "Requires UI Reload",
-                },                
+                },
             },
         })
-    
+
     LAM2:RegisterOptionControls(BWE_HUD.menuName, optionsTable)
 end
