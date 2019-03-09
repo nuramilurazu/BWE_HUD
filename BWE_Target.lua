@@ -3,9 +3,10 @@ local evm = GetEventManager()
 local wim = GetWindowManager()
 local sf = 1/GetSetting(SETTING_TYPE_UI, UI_SETTING_CUSTOM_SCALE)
 
---BWE_HUD.targetContainer = {}
 BWE_HUD.targetFrame = {}
 BWE_HUD.targetUnlock = false
+
+local shielded = false
 
 local allianceIcons = {
 	[1]			= [[/esoui/art/guild/guildbanner_icon_aldmeri.dds]],
@@ -17,19 +18,16 @@ local allianceIcons = {
 function BWE_HUD.targetUnlocker(value)
     local frame = BWE_HUD.targetFrame["BWE_TARGET"]
 
-    if value == true then 
+    if value == true then
         BWE_HUD.UnregisterTargetEvents()
-    else        
+    else
         BWE_HUD.SV.target.position.offsetX = zo_round(frame:GetLeft())
         BWE_HUD.SV.target.position.offsetY = zo_round(frame:GetTop())
         BWE_HUD.RegisterTargetEvents()
     end
 
     BWE_HUD.targetUnlock = value
-    
-	--BWE_HUD.targetContainer:SetMovable(value)
-	--BWE_HUD.targetContainer:SetMouseEnabled(value)
-    
+
     frame:SetHidden(not value)
     frame:SetMovable(value)
     frame:SetMouseEnabled(value)
@@ -37,17 +35,6 @@ function BWE_HUD.targetUnlocker(value)
 end
 
 function BWE_HUD.CreateTargetControls()
-    --[[ local tlw = {}
-
-    tlw = wim:CreateTopLevelWindow()
-    tlw:SetDimensions(300, 50)
-    tlw:SetAnchor(TOPLEFT, GuiRoot, TOPLEFT)
-    tlw:SetMovable(false)
-    tlw:SetMouseEnabled(false)
-    tlw:SetClampedToScreen(true)
-    tlw:SetHidden(false) 
-
-    BWE_HUD.targetContainer = tlw ]]
 
     local frame = {}
 
@@ -78,12 +65,22 @@ function BWE_HUD.CreateTargetControls()
 	frame.bar:SetBarAlignment(0)
 	frame.bar:SetMinMax(0, 1000)
     frame.bar:SetValue(1000)
-    
+
+    frame.shield = wim:CreateControl(nil, frame.bar, CT_STATUSBAR)
+    frame.shield:SetDimensions(frame.bar:GetDimensions())
+	frame.shield:SetAnchor(TOP, frame.bar, TOP)
+	frame.shield:SetDrawLayer(0)
+    frame.shield:SetDrawLevel(2)
+	frame.shield:SetColor(0.4, 0.4, 0.4, 1)
+	frame.shield:SetBarAlignment(0)
+	frame.shield:SetMinMax(0, 1000)
+    frame.shield:SetValue(1000)
+
     frame.gloss = wim:CreateControl(nil, frame.bar, CT_STATUSBAR)
 	frame.gloss:SetDimensions(frame.bar:GetDimensions())
 	frame.gloss:SetAnchor(TOP, frame.bar, TOP)
 	frame.gloss:SetDrawLayer(0)
-	frame.gloss:SetDrawLevel(2)
+	frame.gloss:SetDrawLevel(3)
 	frame.gloss:SetTexture("EsoUI/Art/Miscellaneous/timerBar_genericFill_gloss.dds")
 	frame.gloss:SetTextureCoords(0, 1, 0, 0.8125)
 	frame.gloss:SetBarAlignment(0)
@@ -99,7 +96,7 @@ function BWE_HUD.CreateTargetControls()
 	frame.value:SetAlpha(0.9)
 	frame.value:SetFont("$(BOLD_FONT)|13|soft-shadow-thick")
     frame.value:SetText("18k / 18k 100%")
-    
+
     frame.info = wim:CreateControl(nil, frame, CT_LABEL)
 	frame.info:SetDimensions(frame:GetWidth(), 15)
 	frame.info:SetAnchor(BOTTOMLEFT, frame.statusBar, TOPLEFT, -(2*sf), -(4*sf))
@@ -108,7 +105,7 @@ function BWE_HUD.CreateTargetControls()
 	frame.info:SetVerticalAlignment(TEXT_ALIGN_CENTER)
 	frame.info:SetFont("$(BOLD_FONT)|13|soft-shadow-thin")
 	frame.info:SetText("Queen Ayren(50) ")
-    
+
     frame.title = wim:CreateControl(nil, frame, CT_LABEL)
     frame.title:SetDimensions(frame:GetWidth(), 15)
     frame.title:SetAnchor(BOTTOMLEFT, frame.statusBar, BOTTOMLEFT, -(2*sf), 13*sf)
@@ -117,7 +114,7 @@ function BWE_HUD.CreateTargetControls()
     frame.title:SetVerticalAlignment(TEXT_ALIGN_CENTER)
     frame.title:SetFont("$(BOLD_FONT)|13|soft-shadow-thin")
     frame.title:SetText("  Veteran")
-    
+
     frame.alliance = wim:CreateControl(nil, frame, CT_TEXTURE)
 	frame.alliance:SetDimensions(0, 18)
 	frame.alliance:SetAnchor(TOPRIGHT, frame.statusBar, TOPLEFT, -sf, 0)
@@ -137,9 +134,11 @@ function BWE_HUD.InitializeFrame()
     local iconSize = BWE_HUD
 
     if BWE_HUD.SV.target.custom.enabled == true then
-        frame.bar:SetColor(unpack(BWE_HUD.SV.target.custom.Color))
+        frame.bar:SetColor(unpack(BWE_HUD.SV.target.custom.frameColor))
+        frame.shield:SetColor(unpack(BWE_HUD.SV.target.custom.shieldColor))
     else
-        frame.bar:SetColor(unpack(BWE_HUD.SV.target.color))
+        frame.bar:SetColor(unpack(BWE_HUD.SV.target.frameColor))
+        frame.shield:SetColor(unpack(BWE_HUD.SV.target.shieldColor))
     end
 
     iconSize.class = textSize+(4*sf)
@@ -151,38 +150,32 @@ function BWE_HUD.InitializeFrame()
     frame.info:SetFont("$(BOLD_FONT)|"..textSize.."|soft-shadow-thin")
     frame.title:SetFont("$(BOLD_FONT)|"..textSize.."|soft-shadow-thin")
 
-    --BWE_HUD.targetContainer:SetDimensions(BWE_HUD.SV.target.size.width, BWE_HUD.SV.target.size.height)
-    --frame:SetDimensions(BWE_HUD.SV.target.size.width, BWE_HUD.SV.target.size.height)
-
     frame.barBg:SetAlpha(BWE_HUD.SV.target.opacity.bgAlpha)
     frame.bar:SetAlpha(BWE_HUD.SV.target.opacity.barAlpha)
+    frame.shield:SetAlpha(BWE_HUD.SV.target.opacity.barAlpha)
     frame.gloss:SetAlpha(BWE_HUD.SV.target.opacity.glossAlpha)
-    
-    if BWE_HUD.Debug == true then 
+
+    if BWE_HUD.Debug == true then
         frame:SetHidden(false)
     else
         frame:SetHidden(true)
         BWE_HUD.RegisterTargetEvents()
-        --zo_callLater(BWE_HUD.RegisterTargetEvents, 2000)
-    end 
+    end
 end
 
 function BWE_HUD.SaveTargetFrameLocation()
     BWE_HUD.SV.target.position.offsetX = zo_round(BWE_HUD.targetContainer:GetLeft())
     BWE_HUD.SV.target.position.offsetY = zo_round(BWE_HUD.targetContainer:GetTop())
-
-    --BWE_HUD.targetContainer:ClearAnchors()
-    --BWE_HUD.targetContainer:SetAnchor(TOPLEFT, GuiRoot, TOPLEFT, BWE_HUD.SV.target.position.offsetX, BWE_HUD.SV.target.position.offsetY)
 end
 
 function BWE_HUD.UpdateTargetFrame()
     local frame = BWE_HUD.targetFrame["BWE_TARGET"]
     local iconSize = BWE_HUD
 
-    ZO_TargetUnitFramereticleover:SetHidden(true)    
+    ZO_TargetUnitFramereticleover:SetHidden(true)
 
 	if (not DoesUnitExist('reticleover')) then frame:SetHidden(true) return end
-    
+
     if BWE_HUD.SV.target.uRColor == true then frame.bar:SetColor(GetUnitReactionColor("reticleover")) end
 
     local target = {
@@ -231,7 +224,7 @@ function BWE_HUD.UpdateTargetFrame()
 
         BWE_HUD.UpdateTargetHealth()
         frame:SetHidden(false)
-        
+
     else
 
         if GetUnitDifficulty('reticleover') == 2 then
@@ -242,10 +235,10 @@ function BWE_HUD.UpdateTargetFrame()
             frame.alliance:SetHidden(false)
         else
             frame.alliance:SetHidden(true)
-        end    
-        
+        end
+
         target.title = GetUnitCaption('reticleover')
-		
+
 		if target.title == "" or target.title == nil then
 			frame.title:SetText("")
 		else
@@ -271,13 +264,29 @@ end
 
 function  BWE_HUD.UpdateTargetHealth()
     local frame = BWE_HUD.targetFrame["BWE_TARGET"]
-    local current, max, effectiveMax = GetUnitPower('reticleover', POWERTYPE_HEALTH)
+    local healthValue, healthMax, healthEffMax, shieldValue, shieldMax, temp
 
-    if current <= 0 then frame:SetHidden(true) return end
+    healthValue, healthMax, healthEffMax = GetUnitPower('reticleover', POWERTYPE_HEALTH)
+
+	temp = GetUnitAttributeVisualizerEffectInfo('reticleover', ATTRIBUTE_VISUAL_POWER_SHIELDING, STAT_MITIGATION, ATTRIBUTE_HEALTH, POWERTYPE_HEALTH)
+	if shielded == true then
+		shieldValue = temp
+		frame.shield:SetValue(shieldValue)
+	else
+		if temp == nil then
+		else
+			shieldValue, shieldMax = BWE_HUD.ShieldUpdate(temp)			
+			frame.shield:SetMinMax(0, shieldMax)
+			frame.shield:SetValue(shieldValue)
+			frame.shield:SetHidden(false)
+		end
+	end
+
+    if healthValue <= 0 then frame:SetHidden(true) return end
 
     local percent = 0
     if maximum ~= 0 then
-        percent = (current / max) * 100
+        percent = (healthValue / healthMax) * 100
         if percent < 10 then
             percent = ZO_LocalizeDecimalNumber(zo_roundToNearest(percent, .1))
         else
@@ -285,32 +294,63 @@ function  BWE_HUD.UpdateTargetHealth()
         end
     end
 
-    frame.bar:SetMinMax(0, max)
-    frame.bar:SetValue(current)
-	frame.gloss:SetMinMax(0, max)
-    frame.gloss:SetValue(current)
+    frame.bar:SetMinMax(0, healthMax)
+    frame.bar:SetValue(healthValue)
+	frame.gloss:SetMinMax(0, healthMax)
+    frame.gloss:SetValue(healthValue)
+	
+    if shieldValue == 0 or shieldValue == nil then
+        frame.shield:SetHidden(true)
+		shielded = false
+    end
+	
+    if (healthValue > 1000000) then
+        healthValue =  healthValue/1000000
+        healthValue = ZO_LocalizeDecimalNumber(zo_roundToNearest(healthValue, .001))
+        if shielded == false then
+            frame.value:SetText(healthValue.."M ("..percent.."%)")
+        else
+            frame.value:SetText(healthValue.."M ("..percent.."%)".." ["..shieldValue.."]")
+        end
+    else
+        if shielded == false then
+            frame.value:SetText(BWE_HUD.comma_value(healthValue).." ("..percent.."%)")            
+        else
+			frame.value:SetText(BWE_HUD.comma_value(healthValue).." ("..percent.."%)".." ["..shieldValue.."]")
+        end
+    end
 
-    if (current > 1000000) then
-        current =  current/1000000
-        current = ZO_LocalizeDecimalNumber(zo_roundToNearest(current, .001))
-        frame.value:SetText(current.."M ("..percent.."%)")
-    else 
-        frame.value:SetText(BWE_HUD.comma_value(current).." ("..percent.."%)")   
-    end	 
+end
 
+function BWE_HUD.ShieldUpdate(value)
+
+	if shielded == true then return end
+	
+    if value == nil then
+        shieldValue = 0
+        shieldMax = 0
+	else
+		shieldValue = value
+		shieldMax = value
+		shielded = true
+    end
+	
+	return shieldValue, shieldMax
 end
 
 function BWE_HUD.ReinitFrame()
     local frame = BWE_HUD.targetFrame["BWE_TARGET"]
-    local iconSize = BWE_HUD    
+    local iconSize = BWE_HUD
 
     local textSize = BWE_HUD.SV.target.textSize
 
     if BWE_HUD.SV.target.custom.enabled == true then
-        frame.bar:SetColor(unpack(BWE_HUD.SV.target.custom.Color))
+        frame.bar:SetColor(unpack(BWE_HUD.SV.target.custom.frameColor))
+        frame.shield:SetColor(unpack(BWE_HUD.SV.target.custom.shieldColor))
     else
-        frame.bar:SetColor(unpack(BWE_HUD.SV.target.color))
-    end   
+        frame.bar:SetColor(unpack(BWE_HUD.SV.target.frameColor))
+        frame.shield:SetColor(unpack(BWE_HUD.SV.target.shieldColor))
+    end
 
     iconSize.class = textSize+(4*sf)
     iconSize.champ = textSize-(1*sf)
@@ -321,24 +361,26 @@ function BWE_HUD.ReinitFrame()
     frame.info:SetFont("$(BOLD_FONT)|"..textSize.."|soft-shadow-thin")
     frame.title:SetFont("$(BOLD_FONT)|"..textSize.."|soft-shadow-thin")
 
-    --BWE_HUD.targetContainer:SetDimensions(BWE_HUD.SV.target.size.width, BWE_HUD.SV.target.size.height)
-    --frame:SetDimensions(BWE_HUD.SV.target.size.width, BWE_HUD.SV.target.size.height)
-
     frame.barBg:SetAlpha(BWE_HUD.SV.target.opacity.bgAlpha)
     frame.bar:SetAlpha(BWE_HUD.SV.target.opacity.barAlpha)
+    frame.shield:SetAlpha(BWE_HUD.SV.target.opacity.barAlpha)
     frame.gloss:SetAlpha(BWE_HUD.SV.target.opacity.glossAlpha)
 end
 
 function BWE_HUD.CombatState()
     local frame = BWE_HUD.targetFrame["BWE_TARGET"]
     local combatState = IsUnitInCombat('player')
-	
+
 	if combatState == true then
-        frame.bar:SetAlpha(1)
-        frame.gloss:SetAlpha(1)
+        frame.bar:SetAlpha(BWE_HUD.SV.target.opacity.icBarAlpha)
+        frame.shield:SetAlpha(BWE_HUD.SV.target.opacity.icBarAlpha)
+        frame.gloss:SetAlpha(BWE_HUD.SV.target.opacity.icGlossAlpha)
+        frame.barBg:SetAlpha(BWE_HUD.SV.target.opacity.icBGAlpha)
 	else
 		frame.bar:SetAlpha(BWE_HUD.SV.target.opacity.barAlpha)
+        frame.shield:SetAlpha(BWE_HUD.SV.target.opacity.barAlpha)
         frame.gloss:SetAlpha(BWE_HUD.SV.target.opacity.glossAlpha)
+        frame.barBg:SetAlpha(BWE_HUD.SV.target.opacity.bgAlpha)
 	end
 end
 

@@ -86,32 +86,43 @@ function BWE_HUD.CreateSettings()
                     type = "colorpicker",
                     name = "Target Frame Color",
                     disabled = not BWE_HUD.SV.target.enabled,
-                    default = function() return unpack(BWE_HUD.SV.target.custom.Color) end,
-                    getFunc = function() return unpack(BWE_HUD.SV.target.custom.Color) end,
+                    default = function() return unpack(BWE_HUD.SV.target.custom.frameColor) end,
+                    getFunc = function() return unpack(BWE_HUD.SV.target.custom.frameColor) end,
                     setFunc = function(r, g, b, a)
-                        BWE_HUD.SV.target.custom.Color = {r, g, b, a}
+                        BWE_HUD.SV.target.custom.frameColor = {r, g, b, a}
                         BWE_HUD.ReinitFrame()
                     end,
                 },
                 [7] = {
+                    type = "colorpicker",
+                    name = "Shield Color",
+                    disabled = not BWE_HUD.SV.target.enabled,
+                    default = function() return unpack(BWE_HUD.SV.target.custom.shieldColor) end,
+                    getFunc = function() return unpack(BWE_HUD.SV.target.custom.shieldColor) end,
+                    setFunc = function(r, g, b, a)
+                        BWE_HUD.SV.target.custom.shieldColor = {r, g, b, a}
+                        BWE_HUD.ReinitFrame()
+                    end,
+                },
+                [8] = {
                     type = "header",
                     name = "Opacity Settings",
                 },
-                [8] = {
+                [9] = {
                     type = "slider",
                     name = "Target Frame Opacity",
                     min = 10,
                     max = 100,
                     step = 5,
                     disabled = not BWE_HUD.SV.target.enabled,
-                    default = BWE_HUD.defaults.target.opacity.barAlpha,
-                    getFunc = function() return zo_round(BWE_HUD.SV.target.opacity.barAlpha*100) end,
+                    default = BWE_HUD.defaults.target.opacity.icBarAlpha,
+                    getFunc = function() return zo_round(BWE_HUD.SV.target.opacity.icBarAlpha*100) end,
                     setFunc = function(newValue)
-                        BWE_HUD.SV.target.opacity.barAlpha = zo_roundToNearest((newValue/100), .01),
+                        BWE_HUD.SV.target.opacity.icBarAlpha = zo_roundToNearest((newValue/100), .01),
                         BWE_HUD.ReinitFrame()
                     end,
                 },
-                [9] = {
+                [10] = {
                     type = "slider",
                     name = "Background Opacity",
                     min = 0,
@@ -125,7 +136,7 @@ function BWE_HUD.CreateSettings()
                         BWE_HUD.ReinitFrame()
                     end,
                 },
-                [10] = {
+                [11] = {
                     type = "slider",
                     name = "Gloss Opacity",
                     min = 0,
@@ -139,11 +150,57 @@ function BWE_HUD.CreateSettings()
                         BWE_HUD.ReinitFrame()
                     end,
                 },
-                [11] = {
+                [12] = {
+                    type = "header",
+                    name = "In Combat Opacity Settings",
+                },
+                [13] = {
+                    type = "slider",
+                    name = "In Combat Target Frame Opacity",
+                    min = 10,
+                    max = 100,
+                    step = 5,
+                    disabled = not BWE_HUD.SV.target.enabled,
+                    default = BWE_HUD.defaults.target.opacity.barAlpha,
+                    getFunc = function() return zo_round(BWE_HUD.SV.target.opacity.barAlpha*100) end,
+                    setFunc = function(newValue)
+                        BWE_HUD.SV.target.opacity.barAlpha = zo_roundToNearest((newValue/100), .01),
+                        BWE_HUD.ReinitFrame()
+                    end,
+                },
+                [14] = {
+                    type = "slider",
+                    name = "In Combat Background Opacity",
+                    min = 0,
+                    max = 100,
+                    step = 5,
+                    disabled = not BWE_HUD.SV.target.enabled,
+                    default = BWE_HUD.defaults.target.opacity.icBGAlpha,
+                    getFunc = function() return zo_round(BWE_HUD.SV.target.opacity.icBGAlpha*100) end,
+                    setFunc = function(newValue)
+                        BWE_HUD.SV.target.opacity.icBGAlpha = zo_roundToNearest((newValue/100), .01),
+                        BWE_HUD.ReinitFrame()
+                    end,
+                },
+                [15] = {
+                    type = "slider",
+                    name = "In Combat Gloss Opacity",
+                    min = 0,
+                    max = 100,
+                    step = 5,
+                    disabled = not BWE_HUD.SV.target.enabled,
+                    default = BWE_HUD.defaults.target.opacity.icGlossAlpha,
+                    getFunc = function() return zo_round(BWE_HUD.SV.target.opacity.icGlossAlpha*100) end,
+                    setFunc = function(newValue)
+                        BWE_HUD.SV.target.opacity.icGlossAlpha = zo_roundToNearest((newValue/100), .01),
+                        BWE_HUD.ReinitFrame()
+                    end,
+                },
+                [16] = {
                     type = "header",
                     name = "Size Settings",
                 },
-                [12] = {
+                [17] = {
                     type = "slider",
                     name = "Text Size",
                     min = 12,
@@ -157,7 +214,7 @@ function BWE_HUD.CreateSettings()
                         BWE_HUD.ReinitFrame()
                     end,
                 },
-                [13] = {
+                [18] = {
                     type = "slider",
                     name = "Bar Width",
                     min = 125,
@@ -169,7 +226,7 @@ function BWE_HUD.CreateSettings()
                     setFunc = function(newValue) BWE_HUD.SV.target.size.width = zo_round(newValue) end,
                     warning = "Requires UI Reload",
                 },
-                [14] = {
+                [19] = {
                     type = "slider",
                     name = "Bar Height",
                     min = 30,

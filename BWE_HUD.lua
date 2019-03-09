@@ -4,8 +4,8 @@ local evm = GetEventManager()
 
 BWE_HUD.ADDON_NAME      = "BWE_HUD"
 BWE_HUD.ADDON_AUTHOR    = "Nurami"
-BWE_HUD.ADDON_VERSION   = 0.2
-BWE_HUD.ADDON_SETTINGS  = 1.3
+BWE_HUD.ADDON_VERSION   = 0.3
+BWE_HUD.ADDON_SETTINGS  = 1.4
 BWE_HUD.menuName        = "BWE_HUD Options"
 BWE_HUD.container       = {}
 BWE_HUD.Debug			= false
@@ -58,10 +58,6 @@ function BWE_HUD:Initialize()
 
         BWE_HUD.CreateTargetControls()
         BWE_HUD.InitializeFrame()
-
-        --[[ BWE_HUD.targetContainer:ClearAnchors()
-        BWE_HUD.targetContainer:SetAnchor(TOPLEFT, GuiRoot, TOPLEFT, BWE_HUD.SV.target.position.offsetX, BWE_HUD.SV.target.position.offsetY)
-        BWE_HUD.targetContainer:SetHandler("OnMoveStop", BWE_HUD.SaveTargetFrameLocation) ]]
     end
 
     --if BWE_HUD_SV.player.enabled == true then BWE_HUD.CreatePlayerControls() end
