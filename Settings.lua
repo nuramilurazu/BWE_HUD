@@ -115,10 +115,10 @@ function BWE_HUD.CreateSettings()
                     max = 100,
                     step = 5,
                     disabled = not BWE_HUD.SV.target.enabled,
-                    default = BWE_HUD.defaults.target.opacity.icBarAlpha,
-                    getFunc = function() return zo_round(BWE_HUD.SV.target.opacity.icBarAlpha*100) end,
+                    default = BWE_HUD.defaults.target.opacity.barAlpha,
+                    getFunc = function() return zo_round(BWE_HUD.SV.target.opacity.barAlpha*100) end,
                     setFunc = function(newValue)
-                        BWE_HUD.SV.target.opacity.icBarAlpha = zo_roundToNearest((newValue/100), .01),
+                        BWE_HUD.SV.target.opacity.barAlpha = zo_roundToNearest((newValue/100), .01),
                         BWE_HUD.ReinitFrame()
                     end,
                 },
@@ -161,10 +161,10 @@ function BWE_HUD.CreateSettings()
                     max = 100,
                     step = 5,
                     disabled = not BWE_HUD.SV.target.enabled,
-                    default = BWE_HUD.defaults.target.opacity.barAlpha,
-                    getFunc = function() return zo_round(BWE_HUD.SV.target.opacity.barAlpha*100) end,
+                    default = BWE_HUD.defaults.target.opacity.icBarAlpha,
+                    getFunc = function() return zo_round(BWE_HUD.SV.target.opacity.icBarAlpha*100) end,
                     setFunc = function(newValue)
-                        BWE_HUD.SV.target.opacity.barAlpha = zo_roundToNearest((newValue/100), .01),
+                        BWE_HUD.SV.target.opacity.icBarAlpha = zo_roundToNearest((newValue/100), .01),
                         BWE_HUD.ReinitFrame()
                     end,
                 },
