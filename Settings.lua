@@ -73,6 +73,24 @@ function BWE_HUD.CreateSettings()
                 },
                 [5] = {
                     type = "checkbox",
+                    name = "Use Large Alliance Icon",
+                    disabled = not BWE_HUD.SV.target.enabled,
+                    default = BWE_HUD.defaults.target.useLargeIcon,
+                    getFunc = function() return BWE_HUD.SV.target.useLargeIcon end,
+                    setFunc = function(newValue)
+                        BWE_HUD.SV.target.useLargeIcon = newValue
+                        local frame = BWE_HUD.targetFrame["BWE_TARGET"]
+                        if newValue == true then
+                            frame.alliance:SetTexture("/esoui/art/ava/ava_allianceflag_neutral.dds")
+                            frame.alliance:SetHidden(false)
+                        else
+                            frame.alliance:SetHidden(true)
+                        end
+                        BWE_HUD.ReinitFrame()
+                    end,
+                },
+                [6] = {
+                    type = "checkbox",
                     name = "Use Custom Color",
                     disabled = not BWE_HUD.SV.target.enabled,
                     default = BWE_HUD.defaults.target.custom.enabled,
@@ -82,7 +100,7 @@ function BWE_HUD.CreateSettings()
                         BWE_HUD.ReinitFrame()
                     end,
                 },
-                [6] = {
+                [7] = {
                     type = "colorpicker",
                     name = "Target Frame Color",
                     disabled = not BWE_HUD.SV.target.enabled,
@@ -93,7 +111,7 @@ function BWE_HUD.CreateSettings()
                         BWE_HUD.ReinitFrame()
                     end,
                 },
-                [7] = {
+                [8] = {
                     type = "colorpicker",
                     name = "Shield Color",
                     disabled = not BWE_HUD.SV.target.enabled,
@@ -104,11 +122,11 @@ function BWE_HUD.CreateSettings()
                         BWE_HUD.ReinitFrame()
                     end,
                 },
-                [8] = {
+                [9] = {
                     type = "header",
                     name = "Opacity Settings",
                 },
-                [9] = {
+                [10] = {
                     type = "slider",
                     name = "Target Frame Opacity",
                     min = 10,
@@ -122,7 +140,7 @@ function BWE_HUD.CreateSettings()
                         BWE_HUD.ReinitFrame()
                     end,
                 },
-                [10] = {
+                [11] = {
                     type = "slider",
                     name = "Background Opacity",
                     min = 0,
@@ -136,7 +154,7 @@ function BWE_HUD.CreateSettings()
                         BWE_HUD.ReinitFrame()
                     end,
                 },
-                [11] = {
+                [12] = {
                     type = "slider",
                     name = "Gloss Opacity",
                     min = 0,
@@ -150,11 +168,11 @@ function BWE_HUD.CreateSettings()
                         BWE_HUD.ReinitFrame()
                     end,
                 },
-                [12] = {
+                [13] = {
                     type = "header",
                     name = "In Combat Opacity Settings",
                 },
-                [13] = {
+                [14] = {
                     type = "slider",
                     name = "In Combat Target Frame Opacity",
                     min = 10,
@@ -168,7 +186,7 @@ function BWE_HUD.CreateSettings()
                         BWE_HUD.ReinitFrame()
                     end,
                 },
-                [14] = {
+                [15] = {
                     type = "slider",
                     name = "In Combat Background Opacity",
                     min = 0,
@@ -182,7 +200,7 @@ function BWE_HUD.CreateSettings()
                         BWE_HUD.ReinitFrame()
                     end,
                 },
-                [15] = {
+                [16] = {
                     type = "slider",
                     name = "In Combat Gloss Opacity",
                     min = 0,
@@ -196,11 +214,11 @@ function BWE_HUD.CreateSettings()
                         BWE_HUD.ReinitFrame()
                     end,
                 },
-                [16] = {
+                [17] = {
                     type = "header",
                     name = "Size Settings",
                 },
-                [17] = {
+                [18] = {
                     type = "slider",
                     name = "Text Size",
                     min = 12,
@@ -214,7 +232,7 @@ function BWE_HUD.CreateSettings()
                         BWE_HUD.ReinitFrame()
                     end,
                 },
-                [18] = {
+                [19] = {
                     type = "slider",
                     name = "Bar Width",
                     min = 125,
@@ -226,7 +244,7 @@ function BWE_HUD.CreateSettings()
                     setFunc = function(newValue) BWE_HUD.SV.target.size.width = zo_round(newValue) end,
                     warning = "Requires UI Reload",
                 },
-                [19] = {
+                [20] = {
                     type = "slider",
                     name = "Bar Height",
                     min = 30,

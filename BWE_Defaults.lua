@@ -25,6 +25,7 @@ BWE_HUD.defaults = {
 		},
 		frameColor    = {128, 0, 0, 1},   --ZO_POWER_BAR_GRADIENT_COLORS[POWERTYPE_HEALTH],
 		shieldColor   = {0, 0, 205, 1},
+		useLargeIcon  = true,
 		textSize = 12,
 		useACCID = false,
 		enabled  = false,

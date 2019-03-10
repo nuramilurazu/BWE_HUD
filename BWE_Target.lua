@@ -15,6 +15,12 @@ local allianceIcons = {
 	[100]		= [[/esoui/art/ava/ava_allianceflag_neutral.dds]]
 }
 
+local allianceColors = {
+	[1] = "f7e14d",
+	[2] = "b5371b",
+	[3] = "699eb3",
+}
+
 function BWE_HUD.targetUnlocker(value)
     local frame = BWE_HUD.targetFrame["BWE_TARGET"]
 
@@ -116,11 +122,10 @@ function BWE_HUD.CreateTargetControls()
     frame.title:SetText("  Veteran")
 
     frame.alliance = wim:CreateControl(nil, frame, CT_TEXTURE)
-	frame.alliance:SetDimensions(0, 18)
-	frame.alliance:SetAnchor(TOPRIGHT, frame.statusBar, TOPLEFT, -sf, 0)
+	frame.alliance:SetDimensions(BWE_HUD.SV.target.size.height/1.5, BWE_HUD.SV.target.size.height/1.5)
+	frame.alliance:SetAnchor(TOPRIGHT, frame.statusBar, TOPLEFT, -sf, BWE_HUD.SV.target.size.height/5)
 	frame.alliance:SetDrawLayer(2)
-	frame.alliance:SetDrawLevel(1)
-	frame.alliance:SetHidden(false)
+	frame.alliance:SetDrawLevel(0)
 	frame.alliance:SetTexture("/esoui/art/ava/ava_allianceflag_neutral.dds")
 
     BWE_HUD.targetFrame["BWE_TARGET"] = frame
@@ -212,25 +217,30 @@ function BWE_HUD.UpdateTargetFrame()
 
         frame.info:SetText(target.name..target.classIcon..target.lvl)
 
-        frame.alliance:SetTexture(allianceIcons[GetUnitAlliance('reticleover')])
-        --frame.alliance:SetHidden(false)
-
         target.avaRank = GetAvARankIcon(GetUnitAvARank('reticleover'))
-        target.avaRankIcon = zo_iconFormat(target.avaRank, iconSize.ava, iconSize.ava)
+        target.avaRankIcon = zo_iconFormatInheritColor(target.avaRank, iconSize.ava, iconSize.ava)
         target.title = GetUnitTitle('reticleover')
 
         if target.title == "" then target.title = GetAvARankName(GetUnitGender('reticleover'), GetUnitAvARank('reticleover')) end
-        frame.title:SetText(target.alliance.." "..target.avaRankIcon.." "..target.title)
+
+        if BWE_HUD.SV.target.useLargeIcon == true then 
+            frame.alliance:SetTexture(allianceIcons[GetUnitAlliance('reticleover')])
+            frame.alliance:SetHidden(false)
+            frame.title:SetText("|c"..allianceColors[GetUnitAlliance('reticleover')]..target.avaRankIcon.."| ".."|cFFFFFF"..target.title.."|")
+        else
+            frame.title:SetText(target.alliance.." ".."|c"..allianceColors[GetUnitAlliance('reticleover')]..target.avaRankIcon.."| ".."|cFFFFFF"..target.title.."|")
+            frame.alliance:SetHidden(true)
+        end
 
         BWE_HUD.UpdateTargetHealth()
         frame:SetHidden(false)
 
     else
 
-        if GetUnitDifficulty('reticleover') == 2 then
+        if GetUnitDifficulty('reticleover') == MONSTER_DIFFICULTY_HARD then
             frame.alliance:SetTexture("/esoui/art/lfg/lfg_normaldungeon_down.dds")
             frame.alliance:SetHidden(false)
-        elseif GetUnitDifficulty('reticleover') == 3 then
+        elseif GetUnitDifficulty('reticleover') == MONSTER_DIFFICULTY_DEADLY then
             frame.alliance:SetTexture("/esoui/art/unitframes/target_veteranrank_icon.dds")
             frame.alliance:SetHidden(false)
         else
