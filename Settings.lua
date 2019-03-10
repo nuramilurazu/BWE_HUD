@@ -259,5 +259,59 @@ function BWE_HUD.CreateSettings()
             },
         })
 
+        table.insert(optionsTable, {
+            type = "header",
+            name = ZO_HIGHLIGHT_TEXT:Colorize("Hotbar Settings"),
+        })
+
+        table.insert(optionsTable, {
+            type = "checkbox",
+            name = "Use Advanced Hotbar",
+            default = BWE_HUD.SV.hotbar.enable,
+            getFunc = function() return BWE_HUD.SV.hotbar.enable end,
+            setFunc = function(newValue)
+                BWE_HUD.SV.hotbar.enable = newValue
+                ReloadUI()
+            end,
+            warning = "Requires UI Reload",
+        })
+
+        table.insert(optionsTable, {
+            type = "submenu",
+            name = "Adv. Hotbar",
+            controls = {
+                [1] = {
+                    type = "checkbox",
+                    name = "Show Keybinds",
+                    disabled = not BWE_HUD.SV.hotbar.enable,
+                    default = BWE_HUD.defaults.hotbar.showKeybinds,
+                    getFunc = function() return BWE_HUD.SV.hotbar.showKeybinds end,
+                    setFunc = function(newValue) BWE_HUD.SV.hotbar.showKeybinds = newValue end,
+                },
+                [2] = {
+                    type = "checkbox",
+                    name = "Show Weapon Swap Icon",
+                    disabled = not BWE_HUD.SV.hotbar.enable,
+                    default = BWE_HUD.defaults.hotbar.showWeaponSwap,
+                    getFunc = function() return BWE_HUD.SV.hotbar.showWeaponSwap end,
+                    setFunc = function(newValue) BWE_HUD.SV.hotbar.showWeaponSwap = newValue end,
+                },
+                [3] = {
+                    type = "slider",
+                    name = "Text Size",
+                    min = 12,
+                    max = 18,
+                    step = 1,
+                    disabled = not BWE_HUD.SV.hotbar.enable,
+                    default = BWE_HUD.defaults.hotbar.textSize,
+                    getFunc = function() return zo_round(BWE_HUD.SV.hotbar.textSize) end,
+                    setFunc = function(newValue)
+                        BWE_HUD.SV.hotbar.textSize = zo_round(newValue)
+                        BWE_HUD.HotbarOptionals()
+                    end,
+                },
+            },
+        })
+
     LAM2:RegisterOptionControls(BWE_HUD.menuName, optionsTable)
 end

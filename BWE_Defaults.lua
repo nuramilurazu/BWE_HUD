@@ -61,6 +61,12 @@ BWE_HUD.defaults = {
 		textSize = 12,
 		enable = false,
 	},
+	hotbar = {
+		enable 		   = true,
+		textSize       = 12,
+		showKeybinds   = true,
+		showWeaponSwap = true,
+	}
 }
 
 local iconSize = BWE_HUD

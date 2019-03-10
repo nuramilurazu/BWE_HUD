@@ -30,6 +30,8 @@ Libs\LibAddonMenu-2.0\controls\divider.lua
 
 BWE_Defaults.lua
 BWE_HUD.lua
+Settings.lua
+
+BWE_Hotbar.lua
 BWE_Target.lua
 BWE_Player.lua
-Settings.lua

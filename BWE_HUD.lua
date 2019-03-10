@@ -60,9 +60,9 @@ function BWE_HUD:Initialize()
         BWE_HUD.InitializeFrame()
     end
 
-    --if BWE_HUD_SV.player.enabled == true then BWE_HUD.CreatePlayerControls() end
+    --if BWE_HUD.SV.player.enabled == true then BWE_HUD.CreatePlayerControls() end
 
-    --if BWE_HUD_SV.hotbarEnabled == true then BWE_HUD.CreateHotbarElements() end
+    if BWE_HUD.SV.hotbar.enable == true then BWE_HUD.CreateHotbarElements() end
 
     evm:UnregisterForEvent(BWE_HUD.ADDON_NAME, EVENT_ADD_ON_LOADED)
 
