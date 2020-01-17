@@ -87,8 +87,8 @@ end
 function BWE_HUD.HotbarOptionals()
 	local frame = BWE_HUD.hotBarElements["BWE_HOTBAR"]
 
-	local textSize = BWE_HUD.SV.hotbar.textSize
 	--set textsize
+	local textSize = BWE_HUD.SV.hotbar.textSize
 	frame.ultVal:SetFont("$(BOLD_FONT)|"..textSize.."|soft-shadow-thin")
 	frame.ultPCT:SetFont("$(BOLD_FONT)|"..textSize.."|soft-shadow-thin")
 	frame.potionCD:SetFont("$(BOLD_FONT)|"..textSize.."|soft-shadow-thin")
