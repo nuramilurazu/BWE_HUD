@@ -181,7 +181,7 @@ function BWE_HUD.UpdateTargetFrame()
 
     if (not DoesUnitExist('reticleover')) then frame:SetHidden(true) return end
     
-    if (IsUnitDead('reticleover')) then frame.SetHidden(true) return end
+    if (IsUnitDead('reticleover')) then frame:SetHidden(true) return end
 
     if BWE_HUD.SV.target.uRColor == true then frame.bar:SetColor(GetUnitReactionColor("reticleover")) end
 
