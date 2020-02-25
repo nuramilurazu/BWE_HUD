@@ -73,24 +73,6 @@ function BWE_HUD.CreateSettings()
                 },
                 [5] = {
                     type = "checkbox",
-                    name = "Use Large Alliance Icon",
-                    disabled = not BWE_HUD.SV.target.enabled,
-                    default = BWE_HUD.defaults.target.useLargeIcon,
-                    getFunc = function() return BWE_HUD.SV.target.useLargeIcon end,
-                    setFunc = function(newValue)
-                        BWE_HUD.SV.target.useLargeIcon = newValue
-                        local frame = BWE_HUD.targetFrame["BWE_TARGET"]
-                        if newValue == true then
-                            frame.alliance:SetTexture("/esoui/art/ava/ava_allianceflag_neutral.dds")
-                            frame.alliance:SetHidden(false)
-                        else
-                            frame.alliance:SetHidden(true)
-                        end
-                        BWE_HUD.ReinitFrame()
-                    end,
-                },
-                [6] = {
-                    type = "checkbox",
                     name = "Use Custom Color",
                     disabled = not BWE_HUD.SV.target.enabled,
                     default = BWE_HUD.defaults.target.custom.enabled,
@@ -100,7 +82,7 @@ function BWE_HUD.CreateSettings()
                         BWE_HUD.ReinitFrame()
                     end,
                 },
-                [7] = {
+                [6] = {
                     type = "colorpicker",
                     name = "Target Frame Color",
                     disabled = not BWE_HUD.SV.target.enabled,
@@ -111,7 +93,7 @@ function BWE_HUD.CreateSettings()
                         BWE_HUD.ReinitFrame()
                     end,
                 },
-                [8] = {
+                [7] = {
                     type = "colorpicker",
                     name = "Shield Color",
                     disabled = not BWE_HUD.SV.target.enabled,
@@ -122,11 +104,11 @@ function BWE_HUD.CreateSettings()
                         BWE_HUD.ReinitFrame()
                     end,
                 },
-                [9] = {
+				[8] = {
                     type = "header",
                     name = "Opacity Settings",
                 },
-                [10] = {
+                [9] = {
                     type = "slider",
                     name = "Target Frame Opacity",
                     min = 10,
@@ -140,39 +122,39 @@ function BWE_HUD.CreateSettings()
                         BWE_HUD.ReinitFrame()
                     end,
                 },
-                [11] = {
+                [10] = {
                     type = "slider",
                     name = "Background Opacity",
                     min = 0,
                     max = 100,
                     step = 5,
                     disabled = not BWE_HUD.SV.target.enabled,
-                    default = BWE_HUD.defaults.target.opacity.bgAlpha,
-                    getFunc = function() return zo_round(BWE_HUD.SV.target.opacity.bgAlpha*100) end,
+                    default = BWE_HUD.defaults.target.opacity.icBGAlpha,
+                    getFunc = function() return zo_round(BWE_HUD.SV.target.opacity.icBGAlpha*100) end,
                     setFunc = function(newValue)
-                        BWE_HUD.SV.target.opacity.bgAlpha = zo_roundToNearest((newValue/100), .01),
+                        BWE_HUD.SV.target.opacity.icBGAlpha = zo_roundToNearest((newValue/100), .01),
                         BWE_HUD.ReinitFrame()
                     end,
                 },
-                [12] = {
+                [11] = {
                     type = "slider",
                     name = "Gloss Opacity",
                     min = 0,
                     max = 100,
                     step = 5,
                     disabled = not BWE_HUD.SV.target.enabled,
-                    default = BWE_HUD.defaults.target.opacity.glossAlpha,
-                    getFunc = function() return zo_round(BWE_HUD.SV.target.opacity.glossAlpha*100) end,
+                    default = BWE_HUD.defaults.target.opacity.icGlossAlpha,
+                    getFunc = function() return zo_round(BWE_HUD.SV.target.opacity.icGlossAlpha*100) end,
                     setFunc = function(newValue)
-                        BWE_HUD.SV.target.opacity.glossAlpha = zo_roundToNearest((newValue/100), .01),
+                        BWE_HUD.SV.target.opacity.icGlossAlpha = zo_roundToNearest((newValue/100), .01),
                         BWE_HUD.ReinitFrame()
                     end,
                 },
-                [13] = {
+                [12] = {
                     type = "header",
                     name = "In Combat Opacity Settings",
                 },
-                [14] = {
+                [13] = {
                     type = "slider",
                     name = "In Combat Target Frame Opacity",
                     min = 10,
@@ -186,39 +168,39 @@ function BWE_HUD.CreateSettings()
                         BWE_HUD.ReinitFrame()
                     end,
                 },
-                [15] = {
+                [14] = {
                     type = "slider",
                     name = "In Combat Background Opacity",
                     min = 0,
                     max = 100,
                     step = 5,
                     disabled = not BWE_HUD.SV.target.enabled,
-                    default = BWE_HUD.defaults.target.opacity.icBGAlpha,
-                    getFunc = function() return zo_round(BWE_HUD.SV.target.opacity.icBGAlpha*100) end,
+                    default = BWE_HUD.defaults.target.opacity.bgAlpha,
+                    getFunc = function() return zo_round(BWE_HUD.SV.target.opacity.bgAlpha*100) end,
                     setFunc = function(newValue)
-                        BWE_HUD.SV.target.opacity.icBGAlpha = zo_roundToNearest((newValue/100), .01),
+                        BWE_HUD.SV.target.opacity.bgAlpha = zo_roundToNearest((newValue/100), .01),
                         BWE_HUD.ReinitFrame()
                     end,
                 },
-                [16] = {
+                [15] = {
                     type = "slider",
                     name = "In Combat Gloss Opacity",
                     min = 0,
                     max = 100,
                     step = 5,
                     disabled = not BWE_HUD.SV.target.enabled,
-                    default = BWE_HUD.defaults.target.opacity.icGlossAlpha,
-                    getFunc = function() return zo_round(BWE_HUD.SV.target.opacity.icGlossAlpha*100) end,
+                    default = BWE_HUD.defaults.target.opacity.glossAlpha,
+                    getFunc = function() return zo_round(BWE_HUD.SV.target.opacity.glossAlpha*100) end,
                     setFunc = function(newValue)
-                        BWE_HUD.SV.target.opacity.icGlossAlpha = zo_roundToNearest((newValue/100), .01),
+                        BWE_HUD.SV.target.opacity.glossAlpha = zo_roundToNearest((newValue/100), .01),
                         BWE_HUD.ReinitFrame()
                     end,
                 },
-                [17] = {
+                [16] = {
                     type = "header",
                     name = "Size Settings",
                 },
-                [18] = {
+                [17] = {
                     type = "slider",
                     name = "Text Size",
                     min = 12,
@@ -232,7 +214,7 @@ function BWE_HUD.CreateSettings()
                         BWE_HUD.ReinitFrame()
                     end,
                 },
-                [19] = {
+                [18] = {
                     type = "slider",
                     name = "Bar Width",
                     min = 125,
@@ -244,7 +226,7 @@ function BWE_HUD.CreateSettings()
                     setFunc = function(newValue) BWE_HUD.SV.target.size.width = zo_round(newValue) end,
                     warning = "Requires UI Reload",
                 },
-                [20] = {
+                [19] = {
                     type = "slider",
                     name = "Bar Height",
                     min = 30,
@@ -255,60 +237,6 @@ function BWE_HUD.CreateSettings()
                     getFunc = function() return zo_round(BWE_HUD.SV.target.size.height) end,
                     setFunc = function(newValue) BWE_HUD.SV.target.size.height = zo_round(newValue) end,
                     warning = "Requires UI Reload",
-                },
-            },
-        })
-
-        table.insert(optionsTable, {
-            type = "header",
-            name = ZO_HIGHLIGHT_TEXT:Colorize("Hotbar Settings"),
-        })
-
-        table.insert(optionsTable, {
-            type = "checkbox",
-            name = "Use Advanced Hotbar",
-            default = BWE_HUD.SV.hotbar.enable,
-            getFunc = function() return BWE_HUD.SV.hotbar.enable end,
-            setFunc = function(newValue)
-                BWE_HUD.SV.hotbar.enable = newValue
-                ReloadUI()
-            end,
-            warning = "Requires UI Reload",
-        })
-
-        table.insert(optionsTable, {
-            type = "submenu",
-            name = "Adv. Hotbar",
-            controls = {
-                [1] = {
-                    type = "checkbox",
-                    name = "Show Keybinds",
-                    disabled = not BWE_HUD.SV.hotbar.enable,
-                    default = BWE_HUD.defaults.hotbar.showKeybinds,
-                    getFunc = function() return BWE_HUD.SV.hotbar.showKeybinds end,
-                    setFunc = function(newValue) BWE_HUD.SV.hotbar.showKeybinds = newValue end,
-                },
-                [2] = {
-                    type = "checkbox",
-                    name = "Show Weapon Swap Icon",
-                    disabled = not BWE_HUD.SV.hotbar.enable,
-                    default = BWE_HUD.defaults.hotbar.showWeaponSwap,
-                    getFunc = function() return BWE_HUD.SV.hotbar.showWeaponSwap end,
-                    setFunc = function(newValue) BWE_HUD.SV.hotbar.showWeaponSwap = newValue end,
-                },
-                [3] = {
-                    type = "slider",
-                    name = "Text Size",
-                    min = 12,
-                    max = 18,
-                    step = 1,
-                    disabled = not BWE_HUD.SV.hotbar.enable,
-                    default = BWE_HUD.defaults.hotbar.textSize,
-                    getFunc = function() return zo_round(BWE_HUD.SV.hotbar.textSize) end,
-                    setFunc = function(newValue)
-                        BWE_HUD.SV.hotbar.textSize = zo_round(newValue)
-                        BWE_HUD.HotbarOptionals()
-                    end,
                 },
             },
         })
