@@ -45,8 +45,16 @@ function BWE_HUD.CreateTargetControls()
     local frame = {}
 
     frame = wim:CreateControl("BWE_TARGET", BWE_HUD.container, CT_CONTROL)
-	frame:SetDimensions(BWE_HUD.SV.target.size.width, BWE_HUD.SV.target.size.height)
-	frame:SetAnchor(TOPLEFT, BWE_HUD.container, TOPLEFT, BWE_HUD.SV.target.position.offsetX, BWE_HUD.SV.target.position.offsetY)
+    frame:SetDimensions(BWE_HUD.SV.target.size.width, BWE_HUD.SV.target.size.height)
+    
+	if GetSetting(SETTING_TYPE_GRAPHICS,GRAPHICS_SETTING_FULLSCREEN) == "0" then --fix frame drift in windowed mode
+		local xpos = BWE_HUD.SV.target.position.offsetX
+		xpos = xpos - 25
+		frame:SetAnchor(TOPLEFT, BWE_HUD.container, TOPLEFT, xpos, BWE_HUD.SV.target.position.offsetY)
+	else
+		frame:SetAnchor(TOPLEFT, BWE_HUD.container, TOPLEFT, BWE_HUD.SV.target.position.offsetX, BWE_HUD.SV.target.position.offsetY)
+    end
+    
     frame:SetMouseEnabled(true)
 
     frame.statusBar = wim:CreateControl(nil, frame, CT_CONTROL)
