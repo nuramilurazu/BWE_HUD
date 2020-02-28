@@ -95,21 +95,30 @@ function BWE_HUD.HotbarOptionals()
 
 	--hide keybinds
 	if BWE_HUD.SV.hotbar.showKeybinds == false then
-		ZO_ActionBar1KeybindBG:SetAlpha(0)
+		ZO_ActionBar1KeybindBG:SetAlpha(true and 0)
 		ZO_ActionBar1KeybindBG:SetHidden(true)
+		ActionButton3ButtonText:SetAlpha(true and 0)
 		ActionButton3ButtonText:SetHidden(true)
+		ActionButton4ButtonText:SetAlpha(true and 0)
 		ActionButton4ButtonText:SetHidden(true)
+		ActionButton5ButtonText:SetAlpha(true and 0)
 		ActionButton5ButtonText:SetHidden(true)
+		ActionButton6ButtonText:SetAlpha(true and 0)
 		ActionButton6ButtonText:SetHidden(true)
+		ActionButton7ButtonText:SetAlpha(true and 0)
 		ActionButton7ButtonText:SetHidden(true)
+		ActionButton8ButtonText:SetAlpha(true and 0)
 		ActionButton8ButtonText:SetHidden(true)
+		ActionButton9ButtonText:SetAlpha(true and 0)
 		ActionButton9ButtonText:SetHidden(true)
 	end
 
 	--hide weapon swap
 	if BWE_HUD.SV.hotbar.showWeaponSwap == false then
-		ZO_ActionBar1WeaponSwap:SetAlpha(0)
-		ZO_ActionBar1WeaponSwapLock:SetAlpha(0)
+		ZO_ActionBar1WeaponSwap:SetAlpha(true and 0)
+		ZO_ActionBar1WeaponSwapLock:SetAlpha(true and 0)
+		ZO_ActionBar1WeaponSwap:SetHidden(true)
+		ZO_ActionBar1WeaponSwapLock:SetHidden(true)
 	end
 end
 
