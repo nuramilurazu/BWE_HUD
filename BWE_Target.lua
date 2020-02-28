@@ -46,15 +46,7 @@ function BWE_HUD.CreateTargetControls()
 
     frame = wim:CreateControl("BWE_TARGET", BWE_HUD.container, CT_CONTROL)
     frame:SetDimensions(BWE_HUD.SV.target.size.width, BWE_HUD.SV.target.size.height)
-    
-	if GetSetting(SETTING_TYPE_GRAPHICS,GRAPHICS_SETTING_FULLSCREEN) == "0" then --fix frame drift in windowed mode
-		local xpos = BWE_HUD.SV.target.position.offsetX
-		xpos = xpos - 25
-		frame:SetAnchor(TOPLEFT, BWE_HUD.container, TOPLEFT, xpos, BWE_HUD.SV.target.position.offsetY)
-	else
-		frame:SetAnchor(TOPLEFT, BWE_HUD.container, TOPLEFT, BWE_HUD.SV.target.position.offsetX, BWE_HUD.SV.target.position.offsetY)
-    end
-    
+	frame:SetAnchor(TOPLEFT, BWE_HUD.container, TOPLEFT, BWE_HUD.SV.target.position.offsetX, BWE_HUD.SV.target.position.offsetY)    
     frame:SetMouseEnabled(true)
 
     frame.statusBar = wim:CreateControl(nil, frame, CT_CONTROL)
@@ -167,6 +159,13 @@ function BWE_HUD.InitializeFrame()
     frame.bar:SetAlpha(BWE_HUD.SV.target.opacity.barAlpha)
     frame.shield:SetAlpha(BWE_HUD.SV.target.opacity.barAlpha)
     frame.gloss:SetAlpha(BWE_HUD.SV.target.opacity.glossAlpha)
+
+    if GetSetting(SETTING_TYPE_GRAPHICS,GRAPHICS_SETTING_FULLSCREEN) == "0" then --Real Fix for drifting issue
+		local xpos = zo_round(frame:GetLeft())
+		xpos = xpos - BWE_HUD.SV.target.position.offsetX
+		xpos = BWE_HUD.SV.target.position.offsetX - xpos
+		frame:SetAnchor(TOPLEFT, BWE_HUD.container, TOPLEFT, xpos, BWE_HUD.SV.target.position.offsetY)
+	end
 
     if BWE_HUD.Debug == true then
         frame:SetHidden(false)
